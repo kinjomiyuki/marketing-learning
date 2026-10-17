@@ -2051,8 +2051,10 @@
         } catch (e) {
             throw { code: 'network', text: 'ネットワークに接続できませんでした。通信状況を確認してください。' };
         }
-        if (res.status === 404) {
-            throw { code: 'no_backend', text: 'このページではチャットを利用できません（Netlifyの公開サイトでご利用ください）。' };
+        // 関数が未デプロイだと、404かトップページのHTMLが返ってくる。どちらも「関数なし」とみなす
+        const ctype = res.headers.get('content-type') || '';
+        if (res.status === 404 || !ctype.includes('application/json')) {
+            throw { code: 'no_backend', text: 'チャットのサーバー側（関数）がまだ公開されていません。サイトの管理者がNetlifyに関数つきで公開すると使えるようになります。' };
         }
 
         let data = null;
