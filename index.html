@@ -156,6 +156,8 @@
     transition: all .2s ease;
   }
   .back-button:hover { background: #f9fafb; border-color: #d1d5db; }
+  .nav-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .nav-row .back-button { margin-bottom: 0; }
 
   .section-title {
     font-size: 20px;
@@ -733,31 +735,46 @@
     </div>
 
     <div id="basics" class="learning-area">
-      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <div class="nav-row">
+        <button class="back-button" onclick="goBack('basics')">← 戻る</button>
+        <button class="back-button" onclick="goHome()">トップに戻る</button>
+      </div>
       <h2 class="section-title">マーケティングの基礎</h2>
       <div id="basics-content"></div>
     </div>
 
     <div id="review" class="learning-area">
-      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <div class="nav-row">
+        <button class="back-button" onclick="goBack('review')">← 戻る</button>
+        <button class="back-button" onclick="goHome()">トップに戻る</button>
+      </div>
       <h2 class="section-title">今日の復習</h2>
       <div id="review-content"></div>
     </div>
 
     <div id="socratic" class="learning-area">
-      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <div class="nav-row">
+        <button class="back-button" onclick="goBack('socratic')">← 戻る</button>
+        <button class="back-button" onclick="goHome()">トップに戻る</button>
+      </div>
       <h2 class="section-title">ソクラテス対話</h2>
       <div id="socratic-content"></div>
     </div>
 
     <div id="quiz" class="learning-area">
-      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <div class="nav-row">
+        <button class="back-button" onclick="goBack('quiz')">← 戻る</button>
+        <button class="back-button" onclick="goHome()">トップに戻る</button>
+      </div>
       <h2 class="section-title">知識評価</h2>
       <div id="quiz-content"></div>
     </div>
 
     <div id="scenario" class="learning-area">
-      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <div class="nav-row">
+        <button class="back-button" onclick="goBack('scenario')">← 戻る</button>
+        <button class="back-button" onclick="goHome()">トップに戻る</button>
+      </div>
       <h2 class="section-title">戦略シナリオ</h2>
       <div id="scenario-content"></div>
     </div>
@@ -906,6 +923,16 @@
         });
         document.getElementById(sectionId).classList.add('active');
         window.scrollTo(0, 0);
+    }
+
+    // 「戻る」= 一つ前の画面へ。最初の画面ならトップへ。
+    function goBack(section) {
+        if (section === 'basics') return basicsBack();
+        if (section === 'review') return reviewBack();
+        if (section === 'socratic') return socraticBack();
+        if (section === 'quiz') return quizBack();
+        if (section === 'scenario') return scenarioBack();
+        goHome();
     }
 
     function goHome() {
@@ -1213,10 +1240,34 @@
         `;
     }
 
+    // 基礎モードの画面履歴（戻る用）。同じ画面の再描画は履歴を増やさない
+    let basicsStack = [];
+    let basicsAnswers = {};
+
+    function basicsNav(key, fn) {
+        const top = basicsStack[basicsStack.length - 1];
+        if (top && top.key === key) top.fn = fn;
+        else basicsStack.push({ key, fn });
+    }
+
+    function basicsBack() {
+        basicsStack.pop(); // いまの画面
+        const prev = basicsStack.pop(); // 一つ前（描画時に自分で積み直す）
+        if (prev) prev.fn();
+        else goHome();
+    }
+
     function startBasics() {
         showSection('basics');
         currentBasicsIndex = 0;
         basicsScore = 0;
+        basicsAnswers = {};
+        basicsStack = [];
+        renderBasicsIntro();
+    }
+
+    function renderBasicsIntro() {
+        basicsNav('intro', renderBasicsIntro);
         renderBasics(`
             <div class="method-intro">
                 <span class="story-tag">学び方</span>
@@ -1255,6 +1306,7 @@
             displayBasicsPredict(index);
             return;
         }
+        basicsNav(`warm-${index}`, () => displayBasicsContent(index));
         const prev = basicsModules[index - 1];
         renderBasics(`
             <div class="progress">トピック ${index + 1} / ${basicsModules.length}：はじめる前に</div>
@@ -1292,6 +1344,7 @@
 
     // ステップ1：前リトリーバル（見出しから中身を予想する）
     function displayBasicsPredict(index) {
+        basicsNav(`predict-${index}`, () => displayBasicsPredict(index));
         const notes = getNotes(index);
         renderBasics(`
             ${basicsHeader(index, 0)}
@@ -1309,6 +1362,7 @@
 
     // ステップ2：読む（見る＋聞く）＋記憶のためのメモ
     function displayBasicsRead(index) {
+        basicsNav(`read-${index}`, () => displayBasicsRead(index));
         const mod = basicsModules[index];
         const notes = getNotes(index);
         const canSpeak = 'speechSynthesis' in window;
@@ -1364,6 +1418,7 @@
 
     // ステップ3：後リトリーバル（本文を閉じて、心の中で説明する）
     function displayBasicsExplain(index) {
+        basicsNav(`explain-${index}`, () => displayBasicsExplain(index));
         const notes = getNotes(index);
         renderBasics(`
             ${basicsHeader(index, 2)}
@@ -1429,6 +1484,7 @@
 
     // ステップ4：ワード・リトリーバル（キーワードを見て意味を思い出す）
     function displayBasicsWords(index) {
+        basicsNav(`words-${index}`, () => displayBasicsWords(index));
         renderBasics(`
             ${basicsHeader(index, 3)}
             <div class="question-container">
@@ -1459,6 +1515,7 @@
     }
 
     function displayBasicsQuiz(index) {
+        basicsNav(`quiz-${index}`, () => displayBasicsQuiz(index));
         const q = basicsModules[index].question;
         renderBasics(`
             ${basicsHeader(index, 4)}
@@ -1480,7 +1537,8 @@
     function submitBasicsAnswer(index, selected) {
         const q = basicsModules[index].question;
         const isCorrect = selected === q.correct;
-        if (isCorrect) basicsScore++;
+        basicsAnswers[index] = isCorrect; // 戻って答え直しても二重に加点しない
+        basicsScore = Object.values(basicsAnswers).filter(Boolean).length;
         document.querySelectorAll('input[name="basics-quiz"]').forEach(el => { el.disabled = true; });
 
         const isLast = index + 1 >= basicsModules.length;
@@ -1494,6 +1552,7 @@
     }
 
     function displayBasicsResult() {
+        basicsNav('result', displayBasicsResult);
         const all = store.get(NOTES_KEY, {});
         const questions = basicsModules
             .map((m, i) => ({ title: m.title, q: (all[i] && all[i].questions || '').trim() }))
@@ -1550,8 +1609,25 @@
         }
     }
 
+    let reviewUndo = [];
+
+    // 一つ前のカードに戻る。評価を取り消して、答え直しても二重に進まないようにする
+    function reviewBack() {
+        if (reviewPos <= 0) { goHome(); return; }
+        reviewPos--;
+        const u = reviewUndo[reviewPos];
+        if (u) {
+            const cards = store.get(REVIEW_KEY, {});
+            if (u.prev === undefined) delete cards[u.id];
+            else cards[u.id] = u.prev;
+            store.set(REVIEW_KEY, cards);
+        }
+        displayReviewCard();
+    }
+
     function startReview() {
         reviewQueue = dueReviewCards();
+        reviewUndo = [];
         reviewPos = 0;
         showSection('review');
         displayReviewCard();
@@ -1608,18 +1684,29 @@
 
     function rateReview(remembered) {
         const c = reviewQueue[reviewPos];
+        reviewUndo[reviewPos] = { id: c.id, prev: store.get(REVIEW_KEY, {})[c.id] };
         addReviewCard(c.id, c, remembered);
         reviewPos++;
         displayReviewCard();
     }
 
     // Socratic
+    let socraticIndex = 0;
+    let socraticAnswers = {};
+
+    function socraticBack() {
+        if (socraticIndex <= 0) { goHome(); return; }
+        displaySocraticQuestion(socraticIndex - 1);
+    }
+
     function startSocratic() {
         showSection('socratic');
+        socraticAnswers = {};
         displaySocraticQuestion(0);
     }
 
     function displaySocraticQuestion(index) {
+        socraticIndex = index;
         if (index >= socraticQuestions.length) {
             document.getElementById('socratic-content').innerHTML = `
                 <div class="result-card">
@@ -1643,7 +1730,7 @@
                     </ul>
                 </div>
                 <div class="input-area">
-                    <textarea id="socratic-answer" placeholder="あなたの分析を共有してください..."></textarea>
+                    <textarea id="socratic-answer" placeholder="あなたの分析を共有してください...">${escapeHtml(socraticAnswers[index] || '')}</textarea>
                 </div>
                 <button class="button" onclick="submitSocraticAnswer(${index})">回答を送信</button>
                 <div id="socratic-feedback"></div>
@@ -1658,6 +1745,7 @@
             alert('回答を入力してください');
             return;
         }
+        socraticAnswers[index] = answer;
 
         const feedback = `
             <div class="feedback">
@@ -1672,11 +1760,29 @@
     // Quiz
     let currentQuizIndex = 0;
     let quizScore = 0;
+    let quizResults = {};
+
+    // 回答済みの得点を取り消す（戻って答え直せるように）
+    function quizUnscore(i) {
+        if (quizResults[i] !== undefined) {
+            if (quizResults[i]) quizScore--;
+            delete quizResults[i];
+        }
+    }
+
+    function quizBack() {
+        if (currentQuizIndex <= 0) { goHome(); return; }
+        quizUnscore(currentQuizIndex); // いまの問題に回答済みなら取り消す
+        currentQuizIndex--;
+        quizUnscore(currentQuizIndex);
+        displayQuizQuestion();
+    }
 
     function startQuiz() {
         showSection('quiz');
         currentQuizIndex = 0;
         quizScore = 0;
+        quizResults = {};
         displayQuizQuestion();
     }
 
@@ -1713,8 +1819,15 @@
         document.getElementById('quiz-content').innerHTML = html;
     }
 
+    function nextQuizQuestion() {
+        currentQuizIndex++;
+        displayQuizQuestion();
+    }
+
     function submitQuizAnswer(selected, correct, explanation) {
         const isCorrect = selected === correct;
+        quizUnscore(currentQuizIndex); // 選び直しても二重に加点しない
+        quizResults[currentQuizIndex] = isCorrect;
         if (isCorrect) quizScore++;
 
         const feedback = `
@@ -1722,12 +1835,18 @@
                 <h4>${isCorrect ? '✓ 正解' : '✗ 不正解'}</h4>
                 <p><strong>説明：</strong> ${explanation}</p>
             </div>
-            <button class="button" onclick="displayQuizQuestion()" style="margin-top: 20px;">次の問題</button>
+            <button class="button" onclick="nextQuizQuestion()" style="margin-top: 20px;">次の問題</button>
         `;
         document.getElementById('quiz-feedback').innerHTML = feedback;
     }
 
     // Scenario
+    function scenarioBack() {
+        if (currentScenarioIndex <= 0) { goHome(); return; }
+        currentScenarioIndex--;
+        displayScenario();
+    }
+
     function startScenario() {
         showSection('scenario');
         currentScenarioIndex = 0;
@@ -1901,6 +2020,7 @@
             else if (e && e.code === 'refused') msg = 'その質問には回答できませんでした。別の聞き方をお試しください。';
             pendingEl.textContent = (e && e.text) ? e.text : msg;
             pendingEl.classList.remove('pending');
+            chatHistory.pop(); // 失敗した質問は履歴から外す（次の送信で形式が崩れないように）
         } finally {
             sendBtn.disabled = false;
         }
@@ -1921,11 +2041,19 @@
 
     // Netlify 上：サーバー側の関数に中継してもらう（APIキーはブラウザに出さない）
     async function askViaBackend() {
-        const res = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ messages: chatHistory })
-        });
+        let res;
+        try {
+            res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages: chatHistory })
+            });
+        } catch (e) {
+            throw { code: 'network', text: 'ネットワークに接続できませんでした。通信状況を確認してください。' };
+        }
+        if (res.status === 404) {
+            throw { code: 'no_backend', text: 'このページではチャットを利用できません（Netlifyの公開サイトでご利用ください）。' };
+        }
 
         let data = null;
         try { data = await res.json(); } catch (e) { /* 本文が JSON でない場合 */ }
