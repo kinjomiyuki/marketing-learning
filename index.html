@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    background: #ffffff;
+    color: #111827;
+  }
+
+  /* ---- header ---- */
+  header {
+    background: #ffffff;
+    border-bottom: 1px solid #f3f4f6;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-inner {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand-icon {
+    width: 28px; height: 28px;
+    background: #059669;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-icon svg { width: 16px; height: 16px; color: #fff; }
+  .brand-name { font-weight: 700; font-size: 14px; color: #111827; }
+  .menu-label { font-size: 12px; font-weight: 500; color: #9ca3af; }
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 9999px;
+    background: #d1fae5;
+    display: flex; align-items: center; justify-content: center;
+    color: #047857;
+    font-size: 12px; font-weight: 700;
+  }
+
+  /* ---- main / layout ---- */
+  main {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+  }
+  .content-wrap { max-width: 672px; margin: 0 auto; }
+
+  .learning-area { display: none; animation: fadeIn .4s ease; }
+  .learning-area.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .page-head { text-align: center; margin-bottom: 40px; }
+  .page-head h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 8px 0;
+  }
+  .page-head p { color: #6b7280; margin: 0; }
+
+  /* ---- home cards ---- */
+  .card-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .card {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    font-family: inherit;
+  }
+  .card:hover {
+    border-color: #a7f3d0;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08);
+  }
+  .card-row { display: flex; align-items: flex-start; gap: 16px; }
+
+  .icon-box {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: #ecfdf5;
+    color: #059669;
+    display: flex; align-items: center; justify-content: center;
+    transition: background-color .2s ease;
+  }
+  .card:hover .icon-box { background: #d1fae5; }
+  .icon-box svg { width: 24px; height: 24px; }
+
+  .card-body { flex: 1; min-width: 0; }
+  .tag-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .tag-label {
+    font-size: 12px; font-weight: 600;
+    color: #059669;
+    letter-spacing: 0.6px;
+  }
+  .tag-badge {
+    font-size: 12px;
+    color: #9ca3af;
+    background: #fafafa;
+    padding: 2px 8px;
+    border-radius: 9999px;
+  }
+  .card-title {
+    font-weight: 600; color: #111827;
+    margin: 0 0 4px 0;
+    font-size: 16px;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .card-side {
+    flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  }
+  .chevron { width: 20px; height: 20px; color: #d1d5db; transition: color .2s ease, transform .2s ease; }
+  .card:hover .chevron { color: #10b981; transform: translateX(2px); }
+  .card-time { font-size: 12px; color: #9ca3af; }
+
+  /* ---- sub pages (socratic / quiz / scenario) ---- */
+  .back-button {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+    padding: 8px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 24px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .2s ease;
+  }
+  .back-button:hover { background: #f9fafb; border-color: #d1d5db; }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 24px 0;
+  }
+
+  .progress {
+    background: #ecfdf5;
+    border: 1px solid #d1fae5;
+    color: #047857;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+
+  .question-container {
+    background: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 20px;
+    padding: 32px;
+    margin: 0 0 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  }
+  .question-container h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 16px 0;
+  }
+  .question-container p { color: #4b5563; line-height: 1.8; margin: 0 0 20px 0; font-size: 14px; }
+
+  .hints {
+    background: #f9fafb;
+    border-left: 3px solid #a7f3d0;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+  }
+  .hints strong { color: #059669; font-weight: 600; font-size: 13px; display: block; margin-bottom: 8px; }
+  .hints ul { margin: 8px 0 0 20px; color: #6b7280; font-size: 13px; padding: 0; }
+  .hints li { margin: 6px 0; line-height: 1.6; }
+
+  .input-area { margin: 20px 0; }
+  .input-area textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    color: #111827;
+    font-family: inherit;
+    font-size: 14px;
+    min-height: 120px;
+    resize: vertical;
+    transition: all .2s ease;
+  }
+  .input-area textarea::placeholder { color: #9ca3af; }
+  .input-area textarea:focus { outline: none; border-color: #6ee7b7; background: #fff; box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+
+  .button {
+    background: #059669;
+    border: none;
+    color: #ffffff;
+    padding: 12px 32px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .button:hover { background: #047857; transform: translateY(-1px); }
+
+  .feedback {
+    background: #f0fdf4;
+    border-left: 3px solid #059669;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    animation: fadeIn .3s ease;
+  }
+  .feedback h4 { color: #047857; margin: 0 0 8px 0; font-weight: 600; font-size: 14px; }
+  .feedback p { color: #374151; line-height: 1.7; font-size: 14px; margin: 0; }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+  .quiz-option {
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    padding: 16px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all .2s ease;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .quiz-option:hover { background: #f0fdf4; border-color: #a7f3d0; }
+  .quiz-option input[type="radio"] { cursor: pointer; accent-color: #059669; }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .metric {
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+    padding: 18px;
+    border-radius: 14px;
+    text-align: center;
+  }
+  .metric-label { color: #9ca3af; font-size: 11px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .metric-value { font-size: 22px; font-weight: 700; color: #111827; }
+
+  .scenario-choices { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .choice-button {
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    padding: 18px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all .2s ease;
+    text-align: left;
+    color: #374151;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.7;
+  }
+  .choice-button:hover { background: #f0fdf4; border-color: #a7f3d0; transform: translateX(4px); }
+
+  .result-card {
+    background: #f0fdf4;
+    border: 1px solid #d1fae5;
+    border-radius: 20px;
+    padding: 48px;
+    text-align: center;
+    margin: 24px 0;
+  }
+  .result-card h2 { font-size: 32px; font-weight: 700; color: #059669; margin: 0 0 16px 0; }
+  .result-card p { color: #4b5563; font-size: 14px; line-height: 1.8; margin: 0; }
+
+  @media (max-width: 640px) {
+    .card { padding: 18px; }
+    .question-container { padding: 22px; }
+    .result-card { padding: 32px 22px; }
+  }
+
+  /* ---- basics ---- */
+  .basics-block {
+    background: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  }
+  .basics-block h3 { margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #059669; }
+  .basics-block p { margin: 0; color: #4b5563; font-size: 14px; line-height: 1.8; }
+  .basics-list { margin: 12px 0 0 20px; padding: 0; color: #4b5563; font-size: 14px; line-height: 1.9; }
+  .basics-list li { margin: 4px 0; }
+  .basics-list strong { color: #111827; }
+
+  /* ---- basics story ---- */
+  .basics-block p strong { color: #111827; }
+  .story-intro {
+    background: #ecfdf5;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .story-intro p { margin: 8px 0 0 0; color: #065f46; font-size: 14px; line-height: 1.9; }
+  .story-intro strong { color: #064e3b; }
+  .story-tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    color: #ffffff; background: #059669;
+    border-radius: 9999px; padding: 2px 10px;
+  }
+  .story-block {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .story-label { font-size: 13px; font-weight: 700; color: #b45309; margin-bottom: 10px; }
+  .story-block p { margin: 0 0 10px 0; color: #4b5563; font-size: 14px; line-height: 1.8; }
+  .story-block p:last-child { margin-bottom: 0; }
+  .story-block strong { color: #111827; }
+  .story-block .basics-list { margin: 0 0 12px 20px; }
+  .story-note { margin-top: 14px !important; padding-top: 14px; border-top: 1px dashed #fcd34d; }
+  .step-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .step-row p { margin: 0; }
+  .step-badge {
+    flex: 0 0 28px; height: 28px; border-radius: 8px;
+    background: #f59e0b; color: #ffffff; font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pos-map {
+    position: relative; height: 180px; margin: 16px 0 4px 0;
+    border-left: 2px solid #d1d5db; border-bottom: 2px solid #d1d5db;
+    background: #ffffff; border-radius: 0 12px 0 0;
+  }
+  .pos-axis-y { position: absolute; left: 8px; top: 6px; font-size: 11px; color: #6b7280; }
+  .pos-axis-x { position: absolute; right: 8px; bottom: 6px; font-size: 11px; color: #6b7280; }
+  .pos-dot {
+    position: absolute; transform: translate(-50%, -50%);
+    font-size: 12px; font-weight: 600; white-space: nowrap;
+    background: #f3f4f6; color: #4b5563; border-radius: 9999px; padding: 4px 12px;
+  }
+  .pos-dot-main { background: #059669; color: #ffffff; }
+  .p4-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .p4-table th {
+    text-align: left; vertical-align: top; white-space: nowrap;
+    color: #b45309; font-weight: 700; padding: 10px 12px 10px 0; width: 1%;
+  }
+  .p4-table td { color: #4b5563; line-height: 1.7; padding: 10px 0; }
+  .p4-table tr + tr th, .p4-table tr + tr td { border-top: 1px solid #fde68a; }
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .calc-item { background: #ffffff; border-radius: 12px; padding: 14px; }
+  .calc-name { font-size: 12px; font-weight: 700; color: #b45309; }
+  .calc-formula { font-size: 13px; color: #4b5563; line-height: 1.6; margin: 6px 0; }
+  .calc-result { font-size: 16px; font-weight: 700; color: #111827; }
+  .point-block {
+    border-left: 4px solid #059669;
+    background: #f9fafb;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .point-block p { margin: 6px 0 0 0; color: #374151; font-size: 14px; line-height: 1.8; }
+  .point-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: #059669; }
+  .flow-list { list-style: none; margin: 0; padding: 0; }
+  .flow-list li { display: flex; gap: 12px; padding: 10px 0; font-size: 14px; line-height: 1.7; }
+  .flow-list li + li { border-top: 1px solid #fde68a; }
+  .flow-step { flex: 0 0 96px; font-weight: 700; color: #b45309; }
+  .flow-desc { color: #4b5563; }
+  @media (max-width: 640px) {
+    .story-block, .story-intro { padding: 18px; }
+    .calc-grid { grid-template-columns: 1fr; }
+    .p4-table th, .p4-table td { display: block; width: auto; padding: 0; }
+    .p4-table th { padding-top: 10px; }
+    .p4-table td { padding-bottom: 10px; }
+    .p4-table tr + tr td { border-top: none; }
+    .flow-list li { flex-direction: column; gap: 2px; }
+    .flow-step { flex: none; }
+  }
+
+  /* ---- 学び方（リトリーバル） ---- */
+  .method-intro { background: #ecfdf5; border-radius: 16px; padding: 22px 24px; margin-bottom: 16px; }
+  .method-intro h3 { margin: 10px 0 8px 0; font-size: 17px; color: #064e3b; }
+  .method-intro p { margin: 0; color: #065f46; font-size: 14px; line-height: 1.9; }
+  .method-intro .basics-list { color: #065f46; }
+  .method-intro strong { color: #064e3b; }
+  .method-steps { margin: 8px 0 0 20px; padding: 0; color: #4b5563; font-size: 14px; line-height: 1.9; }
+  .method-steps strong { color: #111827; }
+  .method-note { margin-top: 12px !important; font-size: 13px !important; color: #6b7280 !important; }
+  .step-bar { list-style: none; display: flex; gap: 6px; padding: 0; margin: 0 0 20px 0; counter-reset: step; }
+  .step-bar li {
+    flex: 1; counter-increment: step; text-align: center;
+    font-size: 12px; font-weight: 600; color: #9ca3af;
+    padding: 8px 4px 0 4px; border-top: 3px solid #e5e7eb;
+  }
+  .step-bar li::before { content: counter(step) ". "; }
+  .step-bar li.done { color: #059669; border-color: #a7f3d0; }
+  .step-bar li.current { color: #047857; border-color: #059669; }
+  .step-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: #059669; margin-bottom: 8px; }
+  .predict-title { font-size: 22px; font-weight: 700; color: #111827; margin: 4px 0 14px 0; }
+  .predict-recap { background: #f9fafb; border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; }
+  .predict-recap p { margin: 6px 0 0 0; color: #4b5563; font-size: 14px; line-height: 1.7; white-space: pre-wrap; }
+  .button-ghost {
+    background: #ffffff; border: 1.5px solid #a7f3d0; color: #047857;
+    padding: 10px 18px; border-radius: 10px; cursor: pointer;
+    font-size: 14px; font-weight: 600; font-family: inherit;
+  }
+  .button-ghost:hover { background: #ecfdf5; }
+  .listen-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 16px; }
+  .listen-rate { font-size: 13px; color: #4b5563; display: flex; align-items: center; gap: 6px; }
+  .listen-rate select { font-family: inherit; font-size: 13px; padding: 6px 8px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; }
+  .listen-note { font-size: 12px; color: #9ca3af; flex-basis: 100%; }
+  .memo-block { background: #ffffff; border: 1.5px dashed #a7f3d0; border-radius: 16px; padding: 22px 24px; margin: 8px 0 20px 0; }
+  .memo-lead { margin: 0 0 12px 0; color: #4b5563; font-size: 14px; line-height: 1.8; }
+  .memo-lead strong { color: #111827; }
+  .memo-label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-top: 12px; }
+  .memo-block .input-area { margin: 6px 0 0 0; }
+  .memo-block .input-area textarea { min-height: 72px; }
+  .timer-row { display: flex; align-items: center; gap: 16px; margin: 4px 0 8px 0; }
+  .timer-display { font-size: 24px; font-weight: 700; color: #111827; font-variant-numeric: tabular-nums; }
+  .timer-display.done { color: #059669; }
+  .reread { background: #ffffff; border: 1px solid #f3f4f6; border-radius: 16px; padding: 16px 20px; margin-bottom: 20px; }
+  .reread summary { cursor: pointer; font-size: 14px; font-weight: 600; color: #047857; margin-bottom: 12px; }
+  .rate-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .rate-btn {
+    flex: 1 1 200px; padding: 12px 16px; border-radius: 10px; cursor: pointer;
+    font-size: 14px; font-weight: 600; font-family: inherit; border: 1.5px solid;
+  }
+  .rate-ok { background: #059669; border-color: #059669; color: #ffffff; }
+  .rate-ok:hover { background: #047857; }
+  .rate-ng { background: #ffffff; border-color: #e5e7eb; color: #4b5563; }
+  .rate-ng:hover { background: #f9fafb; }
+  .recall-card { border: 1px solid #e5e7eb; border-radius: 14px; padding: 16px 18px; margin-top: 12px; }
+  .recall-word { font-size: 16px; font-weight: 700; color: #111827; }
+  .recall-def { margin: 10px 0 0 0; padding: 10px 14px; background: #ecfdf5; border-radius: 10px; color: #065f46; font-size: 14px; line-height: 1.7; }
+  .recall-card .recall-reveal { margin-top: 10px; padding: 8px 14px; font-size: 13px; }
+  .recall-card .recall-rate { display: flex; gap: 8px; margin-top: 10px; }
+  .recall-card .recall-rate[hidden] { display: none; }
+  .recall-card .rate-btn { flex: 1 1 0; padding: 9px 10px; font-size: 13px; }
+  .rate-row[hidden] { display: none; }
+  .rate-result { font-size: 13px; font-weight: 600; }
+  .rate-result.ok { color: #059669; }
+  .rate-result.ng { color: #b45309; }
+  .review-banner {
+    width: 100%; display: flex; align-items: center; gap: 14px; text-align: left;
+    background: #059669; color: #ffffff; border: none; border-radius: 16px;
+    padding: 16px 20px; margin-bottom: 20px; cursor: pointer; font-family: inherit;
+  }
+  .review-banner:hover { background: #047857; }
+  .review-count {
+    flex: 0 0 40px; height: 40px; border-radius: 9999px; background: #ffffff; color: #047857;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;
+  }
+  .review-text { flex: 1; font-size: 13px; line-height: 1.6; }
+  .review-text strong { display: block; font-size: 15px; }
+  .review-go { font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .review-banner-idle, .review-banner-idle:hover { background: #f9fafb; color: #6b7280; cursor: default; }
+  .review-banner-idle strong { color: #374151; }
+  .review-card { text-align: center; }
+  .review-word { font-size: 22px; margin: 12px 0; }
+  .review-hint { margin: 0 0 8px 0 !important; }
+  .review-countdown { font-size: 40px; font-weight: 700; color: #059669; margin: 8px 0 16px 0; font-variant-numeric: tabular-nums; }
+  .review-card .recall-def { text-align: left; margin-bottom: 16px; }
+  @media (max-width: 640px) {
+    .step-bar li { font-size: 10px; padding-top: 6px; }
+    .step-bar li::before { content: counter(step); display: block; font-size: 13px; }
+    .memo-block, .method-intro { padding: 18px; }
+    .review-go { display: none; }
+  }
+
+  /* ---- floating chat ---- */
+  .chat-fab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 56px; height: 56px;
+    border-radius: 9999px;
+    background: #059669;
+    color: #fff;
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(5,150,105,0.35);
+    z-index: 1000;
+    transition: transform .2s ease, background-color .2s ease;
+  }
+  .chat-fab:hover { background: #047857; transform: scale(1.06); }
+  .chat-fab svg { width: 26px; height: 26px; }
+
+  .chat-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 92px;
+    width: 340px;
+    max-width: calc(100vw - 32px);
+    height: 460px;
+    max-height: calc(100vh - 140px);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .chat-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  .chat-header {
+    background: #059669;
+    color: #fff;
+    padding: 14px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .chat-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 20px; line-height: 1; padding: 2px 4px; }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f9fafb;
+  }
+  .chat-empty { color: #9ca3af; font-size: 12px; text-align: center; margin-top: 20px; line-height: 1.7; }
+  .chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+  .chat-msg.user { align-self: flex-end; background: #059669; color: #fff; border-bottom-right-radius: 4px; }
+  .chat-msg.bot { align-self: flex-start; background: #fff; border: 1px solid #e5e7eb; color: #374151; border-bottom-left-radius: 4px; }
+  .chat-msg.bot.pending { color: #9ca3af; font-style: italic; }
+
+  .chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #f3f4f6;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .chat-input-row textarea {
+    flex: 1;
+    resize: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    max-height: 80px;
+  }
+  .chat-input-row textarea:focus { outline: none; border-color: #6ee7b7; }
+  .chat-send {
+    background: #059669;
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    padding: 0 14px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .chat-send:disabled { background: #a7f3d0; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+        </svg>
+      </div>
+      <span class="brand-name">Marketing Learn</span>
+    </div>
+    <span class="menu-label">学習メニュー</span>
+    <div class="avatar">学</div>
+  </div>
+</header>
+
+<main>
+  <div class="content-wrap">
+
+    <div id="home" class="learning-area active">
+      <div class="page-head">
+        <h1>今日、何を学びますか？</h1>
+        <p>4つの学習モードから選んで、マーケティングスキルを高めましょう</p>
+      </div>
+
+      <div id="review-banner"></div>
+
+      <div class="card-list">
+
+        <button class="card" onclick="startBasics()">
+          <div class="card-row">
+            <div class="icon-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="tag-row">
+                <span class="tag-label">BASICS</span>
+                <span class="tag-badge">基礎知識</span>
+              </div>
+              <h2 class="card-title">マーケティングの基礎を学ぶ</h2>
+              <p class="card-desc">パン屋「こむぎ堂」の立て直しストーリーで、STP・4P・CACやLTVなどが実際にどう使われるかを学びます。『脳が一生忘れないインプット術』の「思い出す」学び方（予想→読む→説明→用語の想起）で進め、日をあけた復習まで。</p>
+            </div>
+            <div class="card-side">
+              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span class="card-time">約20分</span>
+            </div>
+          </div>
+        </button>
+
+        <button class="card" onclick="startQuiz()">
+          <div class="card-row">
+            <div class="icon-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="tag-row">
+                <span class="tag-label">QUIZ</span>
+                <span class="tag-badge">知識テスト</span>
+              </div>
+              <h2 class="card-title">知識の定着度をすぐに確認</h2>
+              <p class="card-desc">マーケティングの重要概念を厳選した問題で確認します。即時フィードバックで理解のギャップを埋め、体系的な知識を固めましょう。</p>
+            </div>
+            <div class="card-side">
+              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span class="card-time">約10分</span>
+            </div>
+          </div>
+        </button>
+
+        <button class="card" onclick="startScenario()">
+          <div class="card-row">
+            <div class="icon-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"></path>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="tag-row">
+                <span class="tag-label">SCENARIO</span>
+                <span class="tag-badge">実践シミュレーション</span>
+              </div>
+              <h2 class="card-title">リアルな意思決定を体験する</h2>
+              <p class="card-desc">実際のビジネス課題をシミュレーションします。戦略を選択し、その結果としての指標変化を確認しながら、実践的な判断力を養いましょう。</p>
+            </div>
+            <div class="card-side">
+              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span class="card-time">約20分</span>
+            </div>
+          </div>
+        </button>
+
+        <button class="card" onclick="startSocratic()">
+          <div class="card-row">
+            <div class="icon-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="tag-row">
+                <span class="tag-label">SOCRATIC</span>
+                <span class="tag-badge">思考力トレーニング</span>
+              </div>
+              <h2 class="card-title">問いを立てて考える力を磨く</h2>
+              <p class="card-desc">ガイド付きの対話形式で思考を深めます。マーケティング戦略の問いに自分の言葉で答えながら、論理的思考と応用力を鍛えましょう。</p>
+            </div>
+            <div class="card-side">
+              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span class="card-time">約15分</span>
+            </div>
+          </div>
+        </button>
+
+      </div>
+    </div>
+
+    <div id="basics" class="learning-area">
+      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <h2 class="section-title">マーケティングの基礎</h2>
+      <div id="basics-content"></div>
+    </div>
+
+    <div id="review" class="learning-area">
+      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <h2 class="section-title">今日の復習</h2>
+      <div id="review-content"></div>
+    </div>
+
+    <div id="socratic" class="learning-area">
+      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <h2 class="section-title">ソクラテス対話</h2>
+      <div id="socratic-content"></div>
+    </div>
+
+    <div id="quiz" class="learning-area">
+      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <h2 class="section-title">知識評価</h2>
+      <div id="quiz-content"></div>
+    </div>
+
+    <div id="scenario" class="learning-area">
+      <button class="back-button" onclick="goHome()">← 戻る</button>
+      <h2 class="section-title">戦略シナリオ</h2>
+      <div id="scenario-content"></div>
+    </div>
+
+  </div>
+</main>
+
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="質問チャットを開く">
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
+  </svg>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <span>質問チャット</span>
+    <button class="chat-close" onclick="toggleChat()" aria-label="閉じる">×</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-empty">マーケティングについて、いつでも気軽に質問してください。</div>
+  </div>
+  <div class="chat-input-row">
+    <textarea id="chatInput" rows="1" placeholder="質問を入力..." onkeydown="handleChatKeydown(event)"></textarea>
+    <button class="chat-send" id="chatSendBtn" onclick="sendChatMessage()">送信</button>
+  </div>
+</div>
+
+<script>
+    const socraticQuestions = [
+        {
+            question: "革新的なSaaSプロダクトを開発しました。ターゲットオーディエンスの特定とポジショニングを考慮した初期市場進出戦略を説明してください。",
+            hints: ["理想的な顧客プロフィールを定義する", "競争環境を分析する", "ユニークな価値提案を構築する"]
+        },
+        {
+            question: "あなたのプロダクトはチャーン率20%で顧客維持率が低下しています。根本原因を診断するためにどのような分析アプローチを用いますか？",
+            hints: ["定量的な顧客データ分析", "定性的フィードバック収集", "行動パターン評価"]
+        },
+        {
+            question: "予算制約がある中で、リソースを集中させる必要があります。マーケティングチャネルをどのように優先順位付けし、最大のインパクトのためにリソースを配分しますか？",
+            hints: ["ROI計算方法論", "チャネル属性分析", "スケーラビリティの考慮"]
+        }
+    ];
+
+    const socraticResponses = [
+        "優れたフレームワークです。あなたのアプローチは市場ポジショニングの理解を示しています。さらに検討してください：認知度とリード品質をどのように測定しますか？プレミアムポジショニングを正当化する競争優位性は何ですか？",
+        "包括的な分析戦略ですね。複数のデータソースを特定しました。次のステップ：洞察をどのように優先順位付けしますか？顧客維持意思決定に最も直接的に影響する要因は何ですか？",
+        "優れた優先順位付けの考え方です。高ROIチャネルへの焦点は戦略的です。さらに：選択したチャネル内でどのように最適化しますか？リソース再配分を導く成功指標は何ですか？"
+    ];
+
+    const quizQuestions = [
+        {
+            question: "4Psマーケティングフレームワークの4つの要素は何ですか？",
+            options: ["製品、価格、流通、プロモーション", "人、ポジショニング、パッケージング、パフォーマンス", "プラットフォーム、購入、価格設定、ペルソナ", "利益、製品、流通、ポジション"],
+            correct: 0,
+            explanation: "4Ps（製品、価格、流通、プロモーション）は基礎的なマーケティング・ミックス・フレームワークを構成し、市場ポジショニングの中核となる戦略要素を確立します。"
+        },
+        {
+            question: "CAC（顧客獲得コスト）は何を測定しますか？",
+            options: ["年間顧客総価値", "1顧客を獲得するためのコスト", "顧客満足度スコア", "キャンペーン広告費"],
+            correct: 1,
+            explanation: "CACは、マーケティングと営業のすべての費用を含む、1顧客を獲得するために投資された総コストを表します。"
+        },
+        {
+            question: "LTV（ライフタイムバリュー）が示す指標は何ですか？",
+            options: ["顧客1人当たりの年間収入", "総利益率の割合", "顧客が関係全体を通じて生成する総価値", "最大取引金額"],
+            correct: 2,
+            explanation: "LTVは、顧客が企業との関係全体を通じて生成する完全な収入を数値化します。"
+        },
+        {
+            question: "マーケティングにおけるA/Bテストの主な目的は：",
+            options: ["広告予算を削減する", "2つのバージョンを比較してパフォーマンスが高いものを識別する", "顧客の苦情を排除する", "ソーシャルメディアフォロワーを増やす"],
+            correct: 1,
+            explanation: "A/Bテストは、2つのバリエーションをオーディエンスに提示し、どちらがより良いパフォーマンスを発揮するかを測定し、データ駆動型最適化を実現します。"
+        },
+        {
+            question: "コンバージョン率は以下のように計算されます：",
+            options: ["訪問者総数 ÷ 売上", "コンバージョン ÷ 訪問者総数 × 100", "クリックスルー率 × ページビュー数", "リード ÷ インプレッション総数"],
+            correct: 1,
+            explanation: "コンバージョン率 = （コンバージョン ÷ 訪問者総数） × 100で、希望するアクションを完了した訪問者の割合を表します。"
+        }
+    ];
+
+    const scenarios = [
+        {
+            title: "SaaS製品ローンチ戦略",
+            description: "競争市場で新しいプロジェクト管理プラットフォームを展開します。主なゴーツーマーケット戦略を選択してください。",
+            metrics: {
+                awareness: 5000,
+                leads: 150,
+                customers: 10,
+                budget: 50000
+            },
+            choices: [
+                {
+                    text: "インフルエンサーパートナーシップ - 業界で認識されている思想家や実践家と連携",
+                    effects: { awareness: 25000, leads: 800, customers: 80, budget: -35000 },
+                    explanation: "インフルエンサーパートナーシップは信頼性と対象オーディエンスへのリーチを提供します。ROIは高いですが、パートナー選定が重要です。"
+                },
+                {
+                    text: "コンテンツマーケティング戦略 - 包括的なガイド、ホワイトペーパー、技術ドキュメントを開発",
+                    effects: { awareness: 12000, leads: 1200, customers: 120, budget: -15000 },
+                    explanation: "コンテンツマーケティングは権威性とオーガニックトラフィックを構築します。コンバージョン率は高いですが、継続的な努力が必要です。"
+                },
+                {
+                    text: "有料広告戦略 - Google、LinkedIn、業界プラットフォーム全体でのターゲット広告",
+                    effects: { awareness: 18000, leads: 1000, customers: 85, budget: -40000 },
+                    explanation: "有料チャネルは即座で測定可能な結果を精密なターゲティングで提供します。継続的なROI最適化が必要です。"
+                }
+            ]
+        },
+        {
+            title: "顧客維持の危機",
+            description: "サブスクリプションサービスがチャーン上昇に直面しています。維持戦略を選択してください。",
+            metrics: {
+                activeCustomers: 10000,
+                retentionRate: 78,
+                satisfactionScore: 6.8,
+                budget: 30000
+            },
+            choices: [
+                {
+                    text: "ロイヤルティリワードプログラム - 段階的特典と専用機能を備えたポイントシステムを導入",
+                    effects: { retentionRate: 12, satisfactionScore: 1.2, budget: -12000 },
+                    explanation: "構造化されたインセンティブは継続的なエンゲージメントを促進します。効果的ですが、運用インフラが必要です。"
+                },
+                {
+                    text: "カスタマーサクセスイニシアチブ - 専用サポート、オンボーディング、使用最適化を拡張",
+                    effects: { retentionRate: 18, satisfactionScore: 2.5, budget: -22000 },
+                    explanation: "プロアクティブなサポートは満足度とロイヤルティを劇的に改善します。高インパクトですが、リソース集約的です。"
+                },
+                {
+                    text: "プロモーション活動 - 期間限定割引と再エンゲージメントインセンティブ",
+                    effects: { retentionRate: 15, satisfactionScore: 0.2, budget: -18000 },
+                    explanation: "チャーンへの素早い対応ですが、知覚価値を低下させる可能性があります。補助戦略が必要な一時的ソリューション。"
+                }
+            ]
+        }
+    ];
+
+    let currentScenarioIndex = 0;
+    let currentScenarioState = null;
+
+    function showSection(sectionId) {
+        document.querySelectorAll('.learning-area').forEach(el => {
+            el.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function goHome() {
+        stopBasicsMedia();
+        if (reviewTimer) { clearInterval(reviewTimer); reviewTimer = null; }
+        showSection('home');
+        renderReviewBanner();
+    }
+
+    // Basics (teach → confirm with a quiz question, topic by topic)
+    // 全トピックを、架空のパン屋「こむぎ堂」の1本のストーリーでつなぐ。
+    // 各トピックは「考え方 → こむぎ堂ではこう使った → ポイント」の順。
+    const basicsModules = [
+        {
+            title: "マーケティングとは",
+            content: `
+                <div class="story-intro">
+                    <span class="story-tag">STORY</span>
+                    <p>駅から徒歩3分の小さなパン屋「<strong>こむぎ堂</strong>」。味の評判は良いのに、ここ1年は売上が下がり続けています。店主のハルさんがやってきたのは「チラシを増やす」こと。それでもお客さんは増えません。<br>このトピックから最後まで、ハルさんと一緒にマーケティングの考え方を使って、お店を立て直していきます。</p>
+                </div>
+                <div class="basics-block">
+                    <h3>考え方：マーケティングとは</h3>
+                    <p>顧客が本当に必要としている価値を見極め、それを届ける仕組みをつくる活動全体を指します。単なる広告や販促ではなく、<strong>「誰に」「何を」「どう届けるか」</strong>を設計することが本質です。</p>
+                </div>
+                <div class="story-block">
+                    <div class="story-label">こむぎ堂ではこう使った</div>
+                    <p>ハルさんはチラシをやめて、1週間、お客さんに「なぜうちに来たのか」「何に困っているか」を聞いてみました。わかったのは次のことです。</p>
+                    <ul class="basics-list">
+                        <li>朝7〜8時台、駅へ急ぐ会社員が多く通るのに、ほとんど入ってこない</li>
+                        <li>理由は「パンを選んでレジに並ぶ時間がない」から</li>
+                        <li>本当はコンビニより美味しい朝ごはんを食べたいと思っている</li>
+                    </ul>
+                    <p>足りなかったのは宣伝ではなく、<strong>「忙しい朝でもすぐ受け取れる」という届け方</strong>でした。</p>
+                </div>
+                <div class="point-block">
+                    <span class="point-label">POINT</span>
+                    <p>「どう宣伝するか」の前に、「顧客は何に困っていて、何を求めているか」を知る。これがマーケティングの出発点です。</p>
+                </div>
+            `,
+            question: {
+                question: "売上が落ちたお店の店主が、最初にやるべきこととして最もマーケティング的なのはどれですか？",
+                options: [
+                    "チラシの配布枚数を2倍にする",
+                    "全商品を20%値下げする",
+                    "お客さんや通行人が何に困り、何を求めているかを調べる",
+                    "SNSアカウントを毎日更新する"
+                ],
+                correct: 2,
+                explanation: "宣伝や値下げは「手段」です。こむぎ堂のハルさんのように、まず顧客が何を求めているかを知ることで、何をどう届けるべきかが見えてきます。"
+            }
+        },
+        {
+            title: "STP分析（誰に届けるか）",
+            content: `
+                <div class="basics-block">
+                    <h3>考え方：STP分析</h3>
+                    <p>限られたお金・時間・人手を、いちばん効果の出るところに集中させるための考え方です。</p>
+                    <ul class="basics-list">
+                        <li><strong>Segmentation（セグメンテーション）</strong>：市場を、似たニーズを持つグループに分ける</li>
+                        <li><strong>Targeting（ターゲティング）</strong>：その中から、狙うグループを選ぶ</li>
+                        <li><strong>Positioning（ポジショニング）</strong>：競合との違いをはっきりさせ、「〇〇といえばここ」と顧客に覚えてもらう</li>
+                    </ul>
+                </div>
+                <div class="story-block">
+                    <div class="story-label">こむぎ堂ではこう使った</div>
+                    <div class="step-row"><span class="step-badge">S</span><p>お店に来うる人を分けてみました。<br>① 朝の通勤会社員　② 昼の近所の主婦・シニア　③ 夕方の学生</p></div>
+                    <div class="step-row"><span class="step-badge">T</span><p>人数が多いのに、まだ取り込めていない<strong>①朝の通勤会社員</strong>に絞ることに。全員を狙うと、メッセージがぼやけてしまうからです。</p></div>
+                    <div class="step-row"><span class="step-badge">P</span><p>競合はコンビニと駅前のカフェ。コンビニは早いけど味は普通、カフェは美味しいけど時間がかかる。そこでこむぎ堂は<br><strong>「カフェの味を、コンビニの速さで」</strong>というポジションを取ることにしました。</p></div>
+                    <div class="pos-map" aria-label="ポジショニングマップ">
+                        <div class="pos-axis-y">美味しさ ↑</div>
+                        <div class="pos-axis-x">速さ →</div>
+                        <span class="pos-dot" style="left:22%;top:22%;">カフェ</span>
+                        <span class="pos-dot" style="left:72%;top:68%;">コンビニ</span>
+                        <span class="pos-dot pos-dot-main" style="left:72%;top:22%;">こむぎ堂</span>
+                    </div>
+                </div>
+                <div class="point-block">
+                    <span class="point-label">POINT</span>
+                    <p>「みんなに売る」は「誰にも刺さらない」になりがちです。まず相手を決めてから、その人にとっての自分の立ち位置を決めます。</p>
+                </div>
+            `,
+            question: {
+                question: "こむぎ堂が「カフェの味を、コンビニの速さで」と打ち出したのは、STPのどのステップですか？",
+                options: ["Segmentation（市場を分ける）", "Targeting（狙う相手を選ぶ）", "Positioning（競合との違いを決める）", "Promotion（宣伝する）"],
+                correct: 2,
+                explanation: "競合（カフェ・コンビニ）との違いを明確にし、「〇〇といえばこむぎ堂」と覚えてもらう立ち位置を決めるのが Positioning です。Promotion は4Pの要素で、STPには含まれません。"
+            }
+        },
+        {
+            title: "マーケティングの4P（何をどう届けるか）",
+            content: `
+                <div class="basics-block">
+                    <h3>考え方：マーケティングの4P</h3>
+                    <p>STPで決めた「誰に・どんな立ち位置で」を、具体的な打ち手に落とし込むためのフレームワークです。4つをバラバラに考えず、<strong>同じターゲットに向けてそろえる</strong>ことが大切です。</p>
+                    <ul class="basics-list">
+                        <li><strong>Product（製品）</strong>：顧客の課題を解決する商品・サービスそのもの</li>
+                        <li><strong>Price（価格）</strong>：価値に見合い、かつ利益が出る価格</li>
+                        <li><strong>Place（流通）</strong>：顧客が商品を買う・受け取る場所や経路</li>
+                        <li><strong>Promotion（プロモーション）</strong>：存在を知ってもらい、買いたいと思ってもらう情報発信</li>
+                    </ul>
+                </div>
+                <div class="story-block">
+                    <div class="story-label">こむぎ堂ではこう使った（ターゲット：朝の通勤会社員）</div>
+                    <table class="p4-table">
+                        <tr><th>Product</th><td>片手で食べられるサンドとコーヒーの「朝ごはんセット」。選ぶ手間をなくすため、日替わり2種類だけにした</td></tr>
+                        <tr><th>Price</th><td>500円。コンビニ（約400円）より少し高く、カフェ（約900円）より安い。「美味しさの分だけ少し高い」が納得される価格</td></tr>
+                        <tr><th>Place</th><td>スマホで前日に予約して、店頭の専用棚から10秒で受け取れるようにした。レジに並ばなくていい</td></tr>
+                        <tr><th>Promotion</th><td>改札前にポスターを貼り、Instagram広告を駅の半径1km・平日の朝だけに配信。「並ばず10秒」を前面に出した</td></tr>
+                    </table>
+                    <p class="story-note">もし Place を変えずに Promotion だけ頑張っていたら、「行ってみたけどレジが混んでいた」で終わっていたはずです。</p>
+                </div>
+                <div class="point-block">
+                    <span class="point-label">POINT</span>
+                    <p>4Pは「4つ全部が同じ相手の方を向いているか」をチェックする道具です。1つでもずれると、他の3つの効果も落ちます。</p>
+                </div>
+            `,
+            question: {
+                question: "こむぎ堂の「前日にスマホ予約 → 店頭の専用棚で10秒受け取り」は、4Pのどれにあたりますか？",
+                options: ["Product（製品）", "Price（価格）", "Place（流通）", "Promotion（プロモーション）"],
+                correct: 2,
+                explanation: "顧客が商品を買う・受け取る経路をどう設計するかは Place（流通）です。忙しい会社員の「並ぶ時間がない」という課題を、受け取り方を変えることで解決しました。"
+            }
+        },
+        {
+            title: "主要指標（数字で振り返る）",
+            content: `
+                <div class="basics-block">
+                    <h3>考え方：覚えておきたい主要指標</h3>
+                    <p>施策を打ったら、うまくいったかを「感覚」ではなく「数字」で確かめます。</p>
+                    <ul class="basics-list">
+                        <li><strong>CAC（顧客獲得コスト）</strong>：新しい顧客1人を獲得するのにかかった費用</li>
+                        <li><strong>LTV（顧客生涯価値）</strong>：1人の顧客が、付き合いの期間全体でもたらす売上（または利益）</li>
+                        <li><strong>コンバージョン率（CVR）</strong>：訪問者のうち、目標の行動（購入・予約など）をした人の割合</li>
+                        <li><strong>リテンション率</strong>：一定期間がたっても、利用を続けている顧客の割合</li>
+                    </ul>
+                </div>
+                <div class="story-block">
+                    <div class="story-label">こむぎ堂ではこう使った（施策を始めて3か月後）</div>
+                    <div class="calc-grid">
+                        <div class="calc-item">
+                            <div class="calc-name">コンバージョン率</div>
+                            <div class="calc-formula">予約した人 60人 ÷ 予約ページを見た人 1,000人</div>
+                            <div class="calc-result">= 6%</div>
+                        </div>
+                        <div class="calc-item">
+                            <div class="calc-name">CAC</div>
+                            <div class="calc-formula">広告とポスター代 30,000円 ÷ 新しいお客さん 60人</div>
+                            <div class="calc-result">= 1人あたり 500円</div>
+                        </div>
+                        <div class="calc-item">
+                            <div class="calc-name">リテンション率</div>
+                            <div class="calc-formula">3か月後も通っている人 36人 ÷ 最初の 60人</div>
+                            <div class="calc-result">= 60%</div>
+                        </div>
+                        <div class="calc-item">
+                            <div class="calc-name">LTV（売上ベースの見込み）</div>
+                            <div class="calc-formula">500円 × 週3回 × 4週 × 平均6か月 通う</div>
+                            <div class="calc-result">= 1人あたり 36,000円</div>
+                        </div>
+                    </div>
+                    <p class="story-note">1人を500円で獲得して、その人が36,000円使ってくれる。LTV が CAC を大きく上回っているので、ハルさんは「広告費を増やしても元が取れる」と判断し、翌月は予算を倍にしました。<br>一方でリテンション率60%から、「4割の人は3か月以内にやめている」こともわかりました。次はその理由を聞きに行く番です。</p>
+                </div>
+                <div class="point-block">
+                    <span class="point-label">POINT</span>
+                    <p>目安は <strong>LTV ÷ CAC が3倍以上</strong>。それを下回るなら、広告を増やす前に、商品や継続率（リテンション）を見直します。実務では LTV を売上ではなく利益で計算することも多いので、社内でどちらの定義かを確認しましょう。</p>
+                </div>
+            `,
+            question: {
+                question: "ある店は新規客1人の獲得に8,000円かかり（CAC）、その客が使ってくれる金額（LTV）は平均6,000円です。次の一手として最も適切なのはどれですか？",
+                options: [
+                    "広告費を倍にして、新規客をもっと増やす",
+                    "広告を増やす前に、継続して通ってもらう工夫や獲得コストの見直しをする",
+                    "LTV は気にせず、コンバージョン率だけを上げる",
+                    "数字は気にせず、今の施策を続ける"
+                ],
+                correct: 1,
+                explanation: "LTV（6,000円）が CAC（8,000円）を下回っているので、1人獲得するたびに赤字です。この状態で広告を増やすと赤字が広がります。先にリテンションを高めて LTV を上げるか、CAC を下げる方法を考えます。"
+            }
+        },
+        {
+            title: "全体の流れ（まとめ）",
+            content: `
+                <div class="basics-block">
+                    <h3>考え方：ここまでのつながり</h3>
+                    <p>学んだ4つは別々の知識ではなく、<strong>1本の流れ</strong>として使います。</p>
+                </div>
+                <div class="story-block">
+                    <div class="story-label">こむぎ堂の3か月</div>
+                    <ol class="flow-list">
+                        <li><span class="flow-step">① 顧客を知る</span><span class="flow-desc">チラシをやめて話を聞いた →「朝、並ぶ時間がない」に気づく</span></li>
+                        <li><span class="flow-step">② STP</span><span class="flow-desc">朝の通勤会社員に絞り、「カフェの味を、コンビニの速さで」と決める</span></li>
+                        <li><span class="flow-step">③ 4P</span><span class="flow-desc">朝ごはんセット・500円・予約して10秒受け取り・駅前ポスターと朝の広告</span></li>
+                        <li><span class="flow-step">④ 指標</span><span class="flow-desc">CVR 6%、CAC 500円、LTV 36,000円、リテンション60% を確認</span></li>
+                        <li><span class="flow-step">⑤ 改善</span><span class="flow-desc">広告を増やしつつ、やめた4割の理由を聞きに行く → また①へ</span></li>
+                    </ol>
+                    <p class="story-note">結果、朝の時間帯の売上は3か月で約2倍に。ハルさんがしたのは、特別なことではなく「知る → 決める → 届ける → 測る」をくり返しただけでした。</p>
+                </div>
+                <div class="point-block">
+                    <span class="point-label">POINT</span>
+                    <p>この流れを、次の QUIZ・SCENARIO・SOCRATIC モードでも使います。迷ったら「今どのステップにいるか」を思い出してください。</p>
+                </div>
+            `,
+            question: {
+                question: "マーケティングを進める順番として、最も自然なのはどれですか？",
+                options: [
+                    "4Pで施策を決める → 顧客を知る → STPで狙いを決める → 指標で測る",
+                    "顧客を知る → STPで狙いを決める → 4Pで施策を決める → 指標で測って改善",
+                    "指標を決める → 4Pで施策を決める → 顧客を知る → STPで狙いを決める",
+                    "STPで狙いを決める → 指標で測る → 顧客を知る → 4Pで施策を決める"
+                ],
+                correct: 1,
+                explanation: "こむぎ堂の流れと同じです。顧客を知り、誰にどんな立ち位置で届けるか（STP）を決め、具体的な打ち手（4P）に落とし、数字（指標）で確かめて改善します。この流れをくり返していきます。"
+            }
+        }
+    ];
+
+    // ---- 学び方 ----
+    // 星友啓『スタンフォード大学・オンラインハイスクール校長が教える 脳が一生忘れないインプット術』の
+    // 「思い出す（リトリーバル）」中心のインプット術で進める。
+    // 各トピック: 前回の振り返り → 予想する（前リトリーバル） → 読む（見る＋聞く／記憶のためのメモ）
+    //            → 説明する（後リトリーバル） → 用語を思い出す（ワード・リトリーバル） → クイズ
+    // 思い出した用語は復習カードとして保存し、間をあけてホームの「今日の復習」で思い出す。
+
+    // 各トピックのキーワード（ワード・リトリーバルと復習カードに使う）
+    const basicsKeywords = [
+        [
+            { word: "マーケティング", def: "顧客が本当に必要としている価値を見極め、それを届ける仕組みをつくる活動全体" },
+            { word: "マーケティングで設計する3つのこと", def: "「誰に」「何を」「どう届けるか」" }
+        ],
+        [
+            { word: "セグメンテーション", def: "市場を、似たニーズを持つグループに分けること" },
+            { word: "ターゲティング", def: "分けたグループの中から、狙う相手を選ぶこと" },
+            { word: "ポジショニング", def: "競合との違いをはっきりさせ、「〇〇といえばここ」と顧客に覚えてもらう立ち位置を決めること" }
+        ],
+        [
+            { word: "Product（製品）", def: "顧客の課題を解決する商品・サービスそのもの" },
+            { word: "Price（価格）", def: "価値に見合い、かつ利益が出る価格" },
+            { word: "Place（流通）", def: "顧客が商品を買う・受け取る場所や経路" },
+            { word: "Promotion（プロモーション）", def: "存在を知ってもらい、買いたいと思ってもらう情報発信" }
+        ],
+        [
+            { word: "CAC（顧客獲得コスト）", def: "新しい顧客1人を獲得するのにかかった費用" },
+            { word: "LTV（顧客生涯価値）", def: "1人の顧客が、付き合いの期間全体でもたらす売上（または利益）" },
+            { word: "コンバージョン率（CVR）", def: "訪問者のうち、目標の行動（購入・予約など）をした人の割合" },
+            { word: "リテンション率", def: "一定期間がたっても、利用を続けている顧客の割合" },
+            { word: "LTV ÷ CAC の目安", def: "3倍以上。下回るなら広告を増やす前に、商品や継続率を見直す" }
+        ],
+        [
+            { word: "マーケティングの流れ", def: "顧客を知る → STPで狙いを決める → 4Pで施策を決める → 指標で測る → 改善して、また顧客を知る" }
+        ]
+    ];
+
+    const BASICS_STEPS = ["予想する", "読む", "説明する", "用語を思い出す", "クイズ"];
+    const REVIEW_KEY = "ml-review-cards";
+    const NOTES_KEY = "ml-basics-notes";
+    const REVIEW_INTERVALS = [1, 3, 7, 14, 30]; // 思い出せた回数に応じて、次の復習までの日数をのばす
+    const DAY = 24 * 60 * 60 * 1000;
+
+    // localStorage はプライベートモード等で使えないことがあるので、失敗しても学習は続けられるようにする
+    const store = {
+        get(key, fallback) {
+            try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; }
+        },
+        set(key, value) {
+            try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+        }
+    };
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    let currentBasicsIndex = 0;
+    let basicsScore = 0;
+    let explainTimer = null;
+
+    function getNotes(index) {
+        return store.get(NOTES_KEY, {})[index] || {};
+    }
+
+    function saveNote(index, field, value) {
+        const all = store.get(NOTES_KEY, {});
+        all[index] = Object.assign({}, all[index], { [field]: value });
+        store.set(NOTES_KEY, all);
+    }
+
+    function stopBasicsMedia() {
+        if (explainTimer) { clearInterval(explainTimer); explainTimer = null; }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+    }
+
+    function renderBasics(html) {
+        stopBasicsMedia();
+        document.getElementById('basics-content').innerHTML = html;
+        window.scrollTo(0, 0);
+    }
+
+    function basicsHeader(index, step) {
+        const mod = basicsModules[index];
+        return `
+            <div class="progress">トピック ${index + 1} / ${basicsModules.length}：${mod.title}</div>
+            <ol class="step-bar">
+                ${BASICS_STEPS.map((s, i) => `<li class="${i < step ? 'done' : i === step ? 'current' : ''}">${s}</li>`).join('')}
+            </ol>
+        `;
+    }
+
+    function startBasics() {
+        showSection('basics');
+        currentBasicsIndex = 0;
+        basicsScore = 0;
+        renderBasics(`
+            <div class="method-intro">
+                <span class="story-tag">学び方</span>
+                <h3>読むだけでは、記憶に残らない</h3>
+                <p>この講座は、星友啓『スタンフォード大学・オンラインハイスクール校長が教える 脳が一生忘れないインプット術』で紹介されている、<strong>「思い出す」ことを中心にした学び方</strong>で進みます。</p>
+                <ul class="basics-list">
+                    <li><strong>思い出すたびに記憶は強くなる</strong>：読み返すより、何も見ずに思い出そうとするほうが残る（リトリーバル）</li>
+                    <li><strong>メモは記録ではなく、記憶のためにとる</strong>：書き写すのではなく、自分の言葉・自分の考え・疑問を書く</li>
+                    <li><strong>見る＋聞く</strong>：文字を目で追いながら音声でも聞くと、頭に入りやすい</li>
+                    <li><strong>一度で終わらせない</strong>：日をあけて、また思い出す</li>
+                </ul>
+            </div>
+            <div class="basics-block">
+                <h3>各トピックの進め方</h3>
+                <ol class="method-steps">
+                    <li><strong>予想する</strong>：見出しだけを見て、何が書かれていそうか考える</li>
+                    <li><strong>読む</strong>：読み上げも使いながら読み、3種類のメモをとる</li>
+                    <li><strong>説明する</strong>：本文を閉じて、30秒で心の中で説明してみる</li>
+                    <li><strong>用語を思い出す</strong>：キーワードの意味を、答えを見ずに思い出す</li>
+                    <li><strong>クイズ</strong>：場面で使えるか確かめる</li>
+                </ol>
+                <p class="method-note">思い出した用語は「復習カード」になり、1日後・3日後・7日後…とホーム画面の「今日の復習」に出てきます。</p>
+            </div>
+            <button class="button" onclick="displayBasicsContent(0)">はじめる</button>
+        `);
+    }
+
+    // トピックの入口。2つ目以降は、まず前回の内容を思い出してから進む
+    function displayBasicsContent(index) {
+        currentBasicsIndex = index;
+        if (index >= basicsModules.length) {
+            displayBasicsResult();
+            return;
+        }
+        if (index === 0) {
+            displayBasicsPredict(index);
+            return;
+        }
+        const prev = basicsModules[index - 1];
+        renderBasics(`
+            <div class="progress">トピック ${index + 1} / ${basicsModules.length}：はじめる前に</div>
+            <div class="question-container">
+                <h3>前回の振り返り：「${prev.title}」</h3>
+                <p>新しいことを学ぶ前に、前のトピックを思い出しましょう。答えを見る前に、頭の中で意味を言ってみてください。</p>
+                ${basicsKeywords[index - 1].map((k, i) => recallCardHtml(k, `warm-${i}`, false)).join('')}
+            </div>
+            <button class="button" onclick="displayBasicsPredict(${index})">次へ：${basicsModules[index].title}</button>
+        `);
+    }
+
+    function recallCardHtml(k, id, withRating) {
+        return `
+            <div class="recall-card" id="${id}">
+                <div class="recall-word">${k.word}</div>
+                <div class="recall-def" hidden>${k.def}</div>
+                <button class="button-ghost recall-reveal" onclick="revealRecall('${id}')">思い出したら、答えを見る</button>
+                ${withRating ? `
+                <div class="recall-rate" hidden>
+                    <button class="rate-btn rate-ok" onclick="rateWord('${id}', true)">思い出せた</button>
+                    <button class="rate-btn rate-ng" onclick="rateWord('${id}', false)">忘れていた</button>
+                </div>` : ''}
+            </div>
+        `;
+    }
+
+    function revealRecall(id) {
+        const card = document.getElementById(id);
+        card.querySelector('.recall-def').hidden = false;
+        card.querySelector('.recall-reveal').hidden = true;
+        const rate = card.querySelector('.recall-rate');
+        if (rate) rate.hidden = false;
+    }
+
+    // ステップ1：前リトリーバル（見出しから中身を予想する）
+    function displayBasicsPredict(index) {
+        const notes = getNotes(index);
+        renderBasics(`
+            ${basicsHeader(index, 0)}
+            <div class="question-container">
+                <div class="step-kicker">STEP 1　前リトリーバル</div>
+                <div class="predict-title">${basicsModules[index].title}</div>
+                <p>本文を読む前に、この見出しからどんなことが書かれていそうか予想しましょう。知っていることがあれば書き出してみてください。<strong>間違っていても大丈夫</strong>です。予想してから読むと、答え合わせのつもりで読めるので頭に残りやすくなります。</p>
+                <div class="input-area">
+                    <textarea id="basics-predict" placeholder="例：〇〇のことが書かれていそう／〇〇という言葉は聞いたことがある" oninput="saveNote(${index}, 'predict', this.value)">${escapeHtml(notes.predict || '')}</textarea>
+                </div>
+            </div>
+            <button class="button" onclick="displayBasicsRead(${index})">読んでみる</button>
+        `);
+    }
+
+    // ステップ2：読む（見る＋聞く）＋記憶のためのメモ
+    function displayBasicsRead(index) {
+        const mod = basicsModules[index];
+        const notes = getNotes(index);
+        const canSpeak = 'speechSynthesis' in window;
+        renderBasics(`
+            ${basicsHeader(index, 1)}
+            ${notes.predict && notes.predict.trim() ? `
+            <div class="predict-recap"><span class="point-label">あなたの予想</span><p>${escapeHtml(notes.predict)}</p></div>` : ''}
+            ${canSpeak ? `
+            <div class="listen-bar">
+                <button class="button-ghost" id="listen-btn" onclick="toggleListen()">🔊 読み上げを聞きながら読む</button>
+                <label class="listen-rate">速さ
+                    <select id="listen-rate">
+                        <option value="1">1.0倍</option>
+                        <option value="1.25">1.25倍</option>
+                        <option value="1.5">1.5倍</option>
+                    </select>
+                </label>
+                <span class="listen-note">速すぎると理解が追いつかないので、1.5倍速までにしています</span>
+            </div>` : ''}
+            <div id="basics-reading">${mod.content}</div>
+            <div class="memo-block">
+                <div class="step-kicker">記憶のためのメモ</div>
+                <p class="memo-lead">本文を書き写すのではなく、次の3つを書きましょう。<strong>できれば紙のノートに手書き</strong>がおすすめです。アプリに書く場合は下の欄へ（この端末に保存されます）。</p>
+                <label class="memo-label">① キーワードの意味を、自分の言葉で</label>
+                <div class="input-area"><textarea class="memo-input" placeholder="例：ポジショニング＝お客さんの頭の中で「〇〇ならここ」と思われる場所を取ること" oninput="saveNote(${index}, 'words', this.value)">${escapeHtml(notes.words || '')}</textarea></div>
+                <label class="memo-label">② 自分の考え（賛成・反対、その理由、ほかとのつながり）</label>
+                <div class="input-area"><textarea class="memo-input" placeholder="例：自分の会社なら、ターゲットは〇〇だと思う。なぜなら…" oninput="saveNote(${index}, 'thoughts', this.value)">${escapeHtml(notes.thoughts || '')}</textarea></div>
+                <label class="memo-label">③ 疑問（わからないこと、もっと知りたいこと）</label>
+                <div class="input-area"><textarea class="memo-input" placeholder="例：LTVを利益で計算するときは、どうやって出すの？" oninput="saveNote(${index}, 'questions', this.value)">${escapeHtml(notes.questions || '')}</textarea></div>
+            </div>
+            <button class="button" onclick="displayBasicsExplain(${index})">読み終えた → 何も見ずに説明する</button>
+        `);
+    }
+
+    function toggleListen() {
+        const synth = window.speechSynthesis;
+        const btn = document.getElementById('listen-btn');
+        if (synth.speaking) {
+            synth.cancel();
+            btn.textContent = '🔊 読み上げを聞きながら読む';
+            return;
+        }
+        const text = document.getElementById('basics-reading').innerText;
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ja-JP';
+        u.rate = parseFloat(document.getElementById('listen-rate').value) || 1;
+        const voice = synth.getVoices().find(v => v.lang && v.lang.startsWith('ja'));
+        if (voice) u.voice = voice;
+        u.onend = () => { const b = document.getElementById('listen-btn'); if (b) b.textContent = '🔊 読み上げを聞きながら読む'; };
+        synth.speak(u);
+        btn.textContent = '■ 読み上げを止める';
+    }
+
+    // ステップ3：後リトリーバル（本文を閉じて、心の中で説明する）
+    function displayBasicsExplain(index) {
+        const notes = getNotes(index);
+        renderBasics(`
+            ${basicsHeader(index, 2)}
+            <div class="question-container">
+                <div class="step-kicker">STEP 3　後リトリーバル</div>
+                <h3>本文は閉じました。目を閉じて、いま読んだ内容を心の中で説明してみましょう</h3>
+                <p>友だちに教えるつもりで、30秒。<strong>こむぎ堂がどうしたか</strong>も入れて説明できると、記憶に残りやすくなります。思い出せないところがあっても大丈夫。思い出そうとすること自体が記憶を強くします。</p>
+                <div class="timer-row">
+                    <button class="button-ghost" id="explain-timer-btn" onclick="startExplainTimer()">30秒タイマーをスタート</button>
+                    <span class="timer-display" id="explain-timer">0:30</span>
+                </div>
+                <div class="input-area">
+                    <textarea placeholder="説明した内容を書き出してもOK（任意）" oninput="saveNote(${index}, 'explain', this.value)">${escapeHtml(notes.explain || '')}</textarea>
+                </div>
+                <button class="button" onclick="checkBasicsExplain(${index})">答え合わせをする</button>
+            </div>
+            <div id="explain-check"></div>
+        `);
+    }
+
+    function startExplainTimer() {
+        if (explainTimer) clearInterval(explainTimer);
+        let left = 30;
+        const disp = document.getElementById('explain-timer');
+        const btn = document.getElementById('explain-timer-btn');
+        disp.textContent = '0:30';
+        disp.classList.remove('done');
+        btn.textContent = 'もう一度30秒';
+        explainTimer = setInterval(() => {
+            left--;
+            disp.textContent = `0:${String(Math.max(left, 0)).padStart(2, '0')}`;
+            if (left <= 0) {
+                clearInterval(explainTimer);
+                explainTimer = null;
+                disp.textContent = '終了';
+                disp.classList.add('done');
+            }
+        }, 1000);
+    }
+
+    function checkBasicsExplain(index) {
+        if (explainTimer) { clearInterval(explainTimer); explainTimer = null; }
+        const box = document.getElementById('explain-check');
+        box.innerHTML = `
+            <div class="feedback">
+                <h4>本文と照らし合わせましょう</h4>
+                <p>説明できなかったところが、あなたがまだ覚えていないところです。そこを重点的に読み直しましょう。</p>
+            </div>
+            <details class="reread" open>
+                <summary>本文を開く</summary>
+                ${basicsModules[index].content}
+            </details>
+            <div class="question-container">
+                <h3>説明してみて、どうでしたか？</h3>
+                <div class="rate-row">
+                    <button class="rate-btn rate-ok" onclick="displayBasicsWords(${index})">だいたい説明できた → 用語を思い出す</button>
+                    <button class="rate-btn rate-ng" onclick="displayBasicsExplain(${index})">あまりできなかった → もう一度説明する</button>
+                </div>
+            </div>
+        `;
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ステップ4：ワード・リトリーバル（キーワードを見て意味を思い出す）
+    function displayBasicsWords(index) {
+        renderBasics(`
+            ${basicsHeader(index, 3)}
+            <div class="question-container">
+                <div class="step-kicker">STEP 4　ワード・リトリーバル</div>
+                <h3>キーワードの意味を、答えを見ずに思い出しましょう</h3>
+                <p>頭の中で言えたら答えを見て、思い出せたかどうかを正直に選んでください。選んだ用語は復習カードになり、日をあけて「今日の復習」に出てきます。</p>
+                ${basicsKeywords[index].map((k, i) => recallCardHtml(k, `word-${index}-${i}`, true)).join('')}
+            </div>
+            <button class="button" onclick="displayBasicsQuiz(${index})">確認クイズへ</button>
+        `);
+    }
+
+    function rateWord(id, remembered) {
+        const [, index, i] = id.split('-').map(Number);
+        const k = basicsKeywords[index][i];
+        addReviewCard(`${index}-${i}`, k, remembered);
+        const card = document.getElementById(id);
+        card.querySelector('.recall-rate').innerHTML = `<span class="rate-result ${remembered ? 'ok' : 'ng'}">${remembered ? '✓ 思い出せた' : 'もう一度読んで覚え直そう'}</span>`;
+    }
+
+    // 復習カード。思い出せた回数（stage）に応じて次の復習日をのばし、思い出せなければ翌日に戻す
+    function addReviewCard(id, k, remembered) {
+        const cards = store.get(REVIEW_KEY, {});
+        const prev = cards[id];
+        const stage = remembered ? (prev ? Math.min(prev.stage + 1, REVIEW_INTERVALS.length - 1) : 0) : 0;
+        cards[id] = { word: k.word, def: k.def, stage, due: Date.now() + REVIEW_INTERVALS[stage] * DAY };
+        store.set(REVIEW_KEY, cards);
+    }
+
+    function displayBasicsQuiz(index) {
+        const q = basicsModules[index].question;
+        renderBasics(`
+            ${basicsHeader(index, 4)}
+            <div class="question-container">
+                <h3>${q.question}</h3>
+                <div class="quiz-options">
+                    ${q.options.map((opt, i) => `
+                        <label class="quiz-option">
+                            <input type="radio" name="basics-quiz" value="${i}" onchange="submitBasicsAnswer(${index}, ${i})">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+            <div id="basics-feedback"></div>
+        `);
+    }
+
+    function submitBasicsAnswer(index, selected) {
+        const q = basicsModules[index].question;
+        const isCorrect = selected === q.correct;
+        if (isCorrect) basicsScore++;
+        document.querySelectorAll('input[name="basics-quiz"]').forEach(el => { el.disabled = true; });
+
+        const isLast = index + 1 >= basicsModules.length;
+        document.getElementById('basics-feedback').innerHTML = `
+            <div class="feedback">
+                <h4>${isCorrect ? '✓ 正解' : '✗ 不正解'}</h4>
+                <p><strong>解説：</strong> ${q.explanation}</p>
+            </div>
+            <button class="button" onclick="displayBasicsContent(${index + 1})" style="margin-top: 20px;">${isLast ? '結果を見る' : '次のトピックへ'}</button>
+        `;
+    }
+
+    function displayBasicsResult() {
+        const all = store.get(NOTES_KEY, {});
+        const questions = basicsModules
+            .map((m, i) => ({ title: m.title, q: (all[i] && all[i].questions || '').trim() }))
+            .filter(x => x.q);
+        const total = basicsKeywords.reduce((n, ks) => n + ks.length, 0);
+        renderBasics(`
+            <div class="result-card">
+                <h2>${basicsScore} / ${basicsModules.length}</h2>
+                <p>こむぎ堂のストーリーはここまでです。「知る → 決める → 届ける → 測る」の流れを、QUIZ・SCENARIO・SOCRATICモードでさらに実践してみましょう。</p>
+            </div>
+            <div class="point-block">
+                <span class="point-label">次にやること</span>
+                <p>${total}個の用語が復習カードになりました。<strong>明日、ホーム画面の「今日の復習」</strong>から思い出しましょう。忘れかけたころに思い出すほど、記憶は長持ちします。</p>
+            </div>
+            ${questions.length ? `
+            <div class="basics-block">
+                <h3>あなたが書いた疑問</h3>
+                <ul class="basics-list">${questions.map(x => `<li><strong>${x.title}</strong>：${escapeHtml(x.q)}</li>`).join('')}</ul>
+                <p class="method-note">疑問は、右下のチャットで質問して解消しておきましょう。</p>
+            </div>` : ''}
+            <button class="button" onclick="goHome()">ホームに戻る</button>
+        `);
+    }
+
+    // ---- 今日の復習（日をあけた5秒リトリーバル） ----
+    let reviewQueue = [];
+    let reviewPos = 0;
+    let reviewTimer = null;
+
+    function dueReviewCards() {
+        const cards = store.get(REVIEW_KEY, {});
+        const now = Date.now();
+        return Object.keys(cards).filter(id => cards[id].due <= now).map(id => Object.assign({ id }, cards[id]));
+    }
+
+    function renderReviewBanner() {
+        const el = document.getElementById('review-banner');
+        if (!el) return;
+        const cards = store.get(REVIEW_KEY, {});
+        const ids = Object.keys(cards);
+        if (!ids.length) { el.innerHTML = ''; return; }
+        const due = dueReviewCards();
+        if (due.length) {
+            el.innerHTML = `
+                <button class="review-banner" onclick="startReview()">
+                    <span class="review-count">${due.length}</span>
+                    <span class="review-text"><strong>今日の復習</strong>前に学んだ用語を、1語5秒で思い出しましょう</span>
+                    <span class="review-go">はじめる →</span>
+                </button>`;
+        } else {
+            const next = Math.min(...ids.map(id => cards[id].due));
+            const d = new Date(next);
+            el.innerHTML = `<div class="review-banner review-banner-idle"><span class="review-text"><strong>今日の復習はありません</strong>次の復習は ${d.getMonth() + 1}月${d.getDate()}日です</span></div>`;
+        }
+    }
+
+    function startReview() {
+        reviewQueue = dueReviewCards();
+        reviewPos = 0;
+        showSection('review');
+        displayReviewCard();
+    }
+
+    function displayReviewCard() {
+        if (reviewTimer) { clearInterval(reviewTimer); reviewTimer = null; }
+        const box = document.getElementById('review-content');
+        if (reviewPos >= reviewQueue.length) {
+            box.innerHTML = `
+                <div class="result-card">
+                    <h2>おつかれさまでした</h2>
+                    <p>今日の復習は完了です。思い出せた用語は、次はもっと間をあけて出てきます。</p>
+                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                </div>`;
+            return;
+        }
+        const c = reviewQueue[reviewPos];
+        box.innerHTML = `
+            <div class="progress">${reviewPos + 1} / ${reviewQueue.length}</div>
+            <div class="question-container review-card">
+                <div class="step-kicker">5秒リトリーバル</div>
+                <div class="recall-word review-word">${c.word}</div>
+                <p class="review-hint" id="review-hint">この用語の意味を、頭の中で言ってみましょう</p>
+                <div class="review-countdown" id="review-countdown">5</div>
+                <div class="recall-def" id="review-def" hidden>${c.def}</div>
+                <div class="rate-row" id="review-rate" hidden>
+                    <button class="rate-btn rate-ok" onclick="rateReview(true)">思い出せた</button>
+                    <button class="rate-btn rate-ng" onclick="rateReview(false)">思い出せなかった</button>
+                </div>
+                <button class="button-ghost" id="review-reveal" onclick="revealReview()">答えを見る</button>
+            </div>`;
+        let left = 5;
+        reviewTimer = setInterval(() => {
+            left--;
+            const cd = document.getElementById('review-countdown');
+            if (!cd) { clearInterval(reviewTimer); reviewTimer = null; return; }
+            if (left <= 0) {
+                revealReview();
+            } else {
+                cd.textContent = left;
+            }
+        }, 1000);
+    }
+
+    function revealReview() {
+        if (reviewTimer) { clearInterval(reviewTimer); reviewTimer = null; }
+        document.getElementById('review-countdown').hidden = true;
+        document.getElementById('review-hint').hidden = true;
+        document.getElementById('review-reveal').hidden = true;
+        document.getElementById('review-def').hidden = false;
+        document.getElementById('review-rate').hidden = false;
+    }
+
+    function rateReview(remembered) {
+        const c = reviewQueue[reviewPos];
+        addReviewCard(c.id, c, remembered);
+        reviewPos++;
+        displayReviewCard();
+    }
+
+    // Socratic
+    function startSocratic() {
+        showSection('socratic');
+        displaySocraticQuestion(0);
+    }
+
+    function displaySocraticQuestion(index) {
+        if (index >= socraticQuestions.length) {
+            document.getElementById('socratic-content').innerHTML = `
+                <div class="result-card">
+                    <h2>セッション完了</h2>
+                    <p>ソクラテス対話シリーズを完了しました。継続的な練習を通じて戦略的思考を発展させてください。</p>
+                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                </div>
+            `;
+            return;
+        }
+
+        const q = socraticQuestions[index];
+        let html = `
+            <div class="question-container">
+                <h3>問 ${index + 1} / ${socraticQuestions.length}</h3>
+                <p>${q.question}</p>
+                <div class="hints">
+                    <strong>考えるヒント:</strong>
+                    <ul>
+                        ${q.hints.map(h => `<li>${h}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="input-area">
+                    <textarea id="socratic-answer" placeholder="あなたの分析を共有してください..."></textarea>
+                </div>
+                <button class="button" onclick="submitSocraticAnswer(${index})">回答を送信</button>
+                <div id="socratic-feedback"></div>
+            </div>
+        `;
+        document.getElementById('socratic-content').innerHTML = html;
+    }
+
+    function submitSocraticAnswer(index) {
+        const answer = document.getElementById('socratic-answer').value;
+        if (!answer.trim()) {
+            alert('回答を入力してください');
+            return;
+        }
+
+        const feedback = `
+            <div class="feedback">
+                <h4>フィードバック</h4>
+                <p>${socraticResponses[index]}</p>
+            </div>
+            <button class="button" onclick="displaySocraticQuestion(${index + 1})" style="margin-top: 20px;">次の問題</button>
+        `;
+        document.getElementById('socratic-feedback').innerHTML = feedback;
+    }
+
+    // Quiz
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+
+    function startQuiz() {
+        showSection('quiz');
+        currentQuizIndex = 0;
+        quizScore = 0;
+        displayQuizQuestion();
+    }
+
+    function displayQuizQuestion() {
+        if (currentQuizIndex >= quizQuestions.length) {
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="result-card">
+                    <h2>${percentage}%</h2>
+                    <p>スコア：${quizScore} / ${quizQuestions.length} 正解</p>
+                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                </div>
+            `;
+            return;
+        }
+
+        const q = quizQuestions[currentQuizIndex];
+        const progress = `<div class="progress">問 ${currentQuizIndex + 1} / ${quizQuestions.length} | スコア：${quizScore}</div>`;
+
+        let html = progress + `
+            <div class="question-container">
+                <h3>${q.question}</h3>
+                <div class="quiz-options">
+                    ${q.options.map((opt, i) => `
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz" value="${i}" onchange="submitQuizAnswer(${i}, ${q.correct}, '${q.explanation}')">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+            <div id="quiz-feedback"></div>
+        `;
+        document.getElementById('quiz-content').innerHTML = html;
+    }
+
+    function submitQuizAnswer(selected, correct, explanation) {
+        const isCorrect = selected === correct;
+        if (isCorrect) quizScore++;
+
+        const feedback = `
+            <div class="feedback">
+                <h4>${isCorrect ? '✓ 正解' : '✗ 不正解'}</h4>
+                <p><strong>説明：</strong> ${explanation}</p>
+            </div>
+            <button class="button" onclick="displayQuizQuestion()" style="margin-top: 20px;">次の問題</button>
+        `;
+        document.getElementById('quiz-feedback').innerHTML = feedback;
+    }
+
+    // Scenario
+    function startScenario() {
+        showSection('scenario');
+        currentScenarioIndex = 0;
+        displayScenario();
+    }
+
+    function displayScenario() {
+        if (currentScenarioIndex >= scenarios.length) {
+            document.getElementById('scenario-content').innerHTML = `
+                <div class="result-card">
+                    <h2>シナリオシリーズ完了</h2>
+                    <p>すべての戦略シナリオを完了しました。これらの洞察を実世界のマーケティング課題に適用してください。</p>
+                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                </div>
+            `;
+            return;
+        }
+
+        const scenario = scenarios[currentScenarioIndex];
+        currentScenarioState = JSON.parse(JSON.stringify(scenario.metrics));
+
+        let metricsHtml = '';
+        for (const [key, value] of Object.entries(currentScenarioState)) {
+            let label = key;
+            if (key === 'awareness') label = '市場認知度';
+            else if (key === 'leads') label = '適格リード';
+            else if (key === 'customers') label = 'コンバージョン顧客';
+            else if (key === 'budget') label = '残り予算';
+            else if (key === 'retentionRate') label = '維持率 %';
+            else if (key === 'satisfactionScore') label = '満足度 (1-10)';
+            else if (key === 'activeCustomers') label = 'アクティブ顧客';
+
+            metricsHtml += `<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div></div>`;
+        }
+
+        let html = `
+            <div class="progress">シナリオ ${currentScenarioIndex + 1} / ${scenarios.length}</div>
+            <div class="question-container">
+                <h3>${scenario.title}</h3>
+                <p>${scenario.description}</p>
+                <div class="metrics-grid">${metricsHtml}</div>
+            </div>
+
+            <div style="margin: 24px 0;">
+                <h3 style="color: #111827; font-size: 16px; font-weight: 600; margin-bottom: 16px;">戦略的選択肢</h3>
+                <div class="scenario-choices">
+                    ${scenario.choices.map((choice, i) => `
+                        <button class="choice-button" onclick="submitScenarioChoice(${i})">${choice.text}</button>
+                    `).join('')}
+                </div>
+            </div>
+            <div id="scenario-feedback"></div>
+        `;
+
+        document.getElementById('scenario-content').innerHTML = html;
+    }
+
+    function submitScenarioChoice(choiceIndex) {
+        const scenario = scenarios[currentScenarioIndex];
+        const choice = scenario.choices[choiceIndex];
+        const effects = choice.effects;
+
+        for (const [key, value] of Object.entries(effects)) {
+            currentScenarioState[key] += value;
+        }
+
+        let metricsHtml = '';
+        for (const [key, value] of Object.entries(currentScenarioState)) {
+            let label = key;
+            if (key === 'awareness') label = '市場認知度';
+            else if (key === 'leads') label = '適格リード';
+            else if (key === 'customers') label = 'コンバージョン顧客';
+            else if (key === 'budget') label = '残り予算';
+            else if (key === 'retentionRate') label = '維持率 %';
+            else if (key === 'satisfactionScore') label = '満足度 (1-10)';
+            else if (key === 'activeCustomers') label = 'アクティブ顧客';
+
+            metricsHtml += `<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div></div>`;
+        }
+
+        const feedback = `
+            <div class="feedback">
+                <h4>戦略分析</h4>
+                <p>${choice.explanation}</p>
+            </div>
+            <h3 style="color: #111827; font-size: 16px; font-weight: 600; margin-top: 24px; margin-bottom: 12px;">更新されたメトリクス</h3>
+            <div class="metrics-grid">${metricsHtml}</div>
+            <button class="button" onclick="nextScenario()" style="margin-top: 20px;">シナリオシリーズを続行</button>
+        `;
+
+        document.getElementById('scenario-feedback').innerHTML = feedback;
+    }
+
+    function nextScenario() {
+        currentScenarioIndex++;
+        displayScenario();
+    }
+
+    // ---- Chat widget (uses the Claude "sample" runtime capability) ----
+    let chatHistory = [];
+    let claudeSample = null;
+    let chatSampleChecked = false;
+
+    async function ensureSample() {
+        if (chatSampleChecked) return claudeSample;
+        chatSampleChecked = true;
+        try {
+            if (window.claude && typeof window.claude.use === 'function') {
+                claudeSample = await window.claude.use('sample');
+            }
+        } catch (e) {
+            claudeSample = null;
+        }
+        return claudeSample;
+    }
+
+    function toggleChat() {
+        const panel = document.getElementById('chatPanel');
+        const isOpen = panel.classList.toggle('open');
+        if (isOpen) {
+            ensureSample();
+            const input = document.getElementById('chatInput');
+            setTimeout(() => input.focus(), 50);
+        }
+    }
+
+    function handleChatKeydown(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
+        }
+    }
+
+    function appendChatMessage(role, text, pending) {
+        const messagesEl = document.getElementById('chatMessages');
+        const emptyEl = messagesEl.querySelector('.chat-empty');
+        if (emptyEl) emptyEl.remove();
+        const div = document.createElement('div');
+        div.className = 'chat-msg ' + (role === 'user' ? 'user' : 'bot') + (pending ? ' pending' : '');
+        div.textContent = text;
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return div;
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        const sendBtn = document.getElementById('chatSendBtn');
+
+        input.value = '';
+        appendChatMessage('user', text);
+        chatHistory.push({ role: 'user', content: text });
+        sendBtn.disabled = true;
+        const pendingEl = appendChatMessage('bot', '考え中...', true);
+
+        const sample = await ensureSample();
+
+        try {
+            const answer = sample
+                ? await askViaClaudeRuntime(sample, pendingEl)
+                : await askViaBackend();
+            pendingEl.textContent = answer;
+            pendingEl.classList.remove('pending');
+            chatHistory.push({ role: 'assistant', content: answer });
+        } catch (e) {
+            let msg = 'エラーが発生しました。もう一度お試しください。';
+            if (e && e.code === 'not_granted') msg = 'チャット機能の利用が許可されていません。';
+            else if (e && e.code === 'rate_limited') msg = 'しばらく時間をおいてから再度お試しください。';
+            else if (e && e.code === 'refused') msg = 'その質問には回答できませんでした。別の聞き方をお試しください。';
+            pendingEl.textContent = (e && e.text) ? e.text : msg;
+            pendingEl.classList.remove('pending');
+        } finally {
+            sendBtn.disabled = false;
+        }
+    }
+
+    // Artifact 上：ページに与えられた Claude ランタイムを直接使う（ストリーミング表示）
+    async function askViaClaudeRuntime(sample, pendingEl) {
+        const instructions = {
+            role: 'user',
+            content: 'あなたはマーケティング学習アプリ「Marketing Learn」の学習アシスタントです。ユーザーはマーケティングの基礎、4P、STP、CAC、LTV、コンバージョン率、リテンション戦略などについて質問します。学習者にわかりやすく、簡潔に（3〜5文程度、必要なら箇条書き）日本語で答えてください。'
+        };
+        const { text: answer } = await sample([instructions, ...chatHistory], {
+            cache: false,
+            onText: ({ text: partial }) => { pendingEl.textContent = partial; }
+        });
+        return answer;
+    }
+
+    // Netlify 上：サーバー側の関数に中継してもらう（APIキーはブラウザに出さない）
+    async function askViaBackend() {
+        const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: chatHistory })
+        });
+
+        let data = null;
+        try { data = await res.json(); } catch (e) { /* 本文が JSON でない場合 */ }
+
+        if (!res.ok || (data && data.error)) {
+            throw { code: (data && data.code) || 'upstream_error', text: data && data.error };
+        }
+        if (!data || typeof data.text !== 'string') {
+            throw { code: 'upstream_error' };
+        }
+        return data.text;
+    }
+    renderReviewBanner();
+</script>
+</body>
+</html>
