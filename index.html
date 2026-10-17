@@ -2014,6 +2014,15 @@
             pendingEl.classList.remove('pending');
             chatHistory.push({ role: 'assistant', content: answer });
         } catch (e) {
+            // サーバー側（AI）が使えない場合は、サイト内の用語集で答える
+            const fallbackCodes = ['no_backend', 'network', 'not_configured', 'upstream_error'];
+            if (!e || !e.code || fallbackCodes.includes(e.code)) {
+                pendingEl.textContent = localAnswer(text);
+                pendingEl.classList.remove('pending');
+                chatHistory.pop();
+                sendBtn.disabled = false;
+                return;
+            }
             let msg = 'エラーが発生しました。もう一度お試しください。';
             if (e && e.code === 'not_granted') msg = 'チャット機能の利用が許可されていません。';
             else if (e && e.code === 'rate_limited') msg = 'しばらく時間をおいてから再度お試しください。';
@@ -2024,6 +2033,45 @@
         } finally {
             sendBtn.disabled = false;
         }
+    }
+
+    // AIが使えないときの回答：基礎講座の用語集（basicsKeywords）から探す
+    const CHAT_GROUP_ALIASES = [
+        { keys: ['stp'], group: 1 },
+        { keys: ['4p', '４p', 'マーケティングミックス'], group: 2 },
+        { keys: ['指標', 'kpi', '数字'], group: 3 },
+        { keys: ['流れ', 'プロセス', '全体像'], group: 4 }
+    ];
+    const CHAT_WORD_ALIASES = {
+        'cvr': 'コンバージョン', 'conversion': 'コンバージョン', '転換率': 'コンバージョン',
+        '継続率': 'リテンション', 'retention': 'リテンション', 'churn': 'リテンション', '解約': 'リテンション',
+        '顧客獲得': 'cac', '顧客生涯価値': 'ltv', 'ライフタイムバリュー': 'ltv',
+        'リテンション': 'リテンション', 'コンバージョン': 'コンバージョン', 'マーケティング': 'マーケティング',
+        'product': '製品', 'price': '価格', 'place': '流通', 'promotion': 'プロモーション'
+    };
+
+    function localAnswer(question) {
+        const q = question.toLowerCase();
+        const norm = q.replace(/\s+/g, '');
+        const lines = [];
+        const seen = new Set();
+        const add = (k) => { if (!seen.has(k.word)) { seen.add(k.word); lines.push('■ ' + k.word + '\n' + k.def); } };
+
+        CHAT_GROUP_ALIASES.forEach(g => {
+            if (g.keys.some(key => norm.includes(key))) basicsKeywords[g.group].forEach(add);
+        });
+        const extra = Object.keys(CHAT_WORD_ALIASES).filter(a => norm.includes(a)).map(a => CHAT_WORD_ALIASES[a]);
+        basicsKeywords.forEach(group => group.forEach(k => {
+            const terms = k.word.toLowerCase().split(/[（）()・\s]+/).filter(t => t.length >= 2);
+            const hit = terms.some(t => norm.includes(t)) || extra.some(t => k.word.toLowerCase().includes(t));
+            if (hit) add(k);
+        }));
+
+        if (lines.length) {
+            return lines.slice(0, 4).join('\n\n') + '\n\n（基礎講座の用語集からの回答です。くわしくは「マーケティングの基礎を学ぶ」で学べます）';
+        }
+        const all = basicsKeywords.flat().map(k => k.word.replace(/（.*?）/g, '')).slice(0, 10).join('、');
+        return 'その質問には、いまは用語集からしか答えられません。次のような用語なら説明できます：\n' + all + '\n\n例：「CACとは？」「STPって何？」のように聞いてみてください。';
     }
 
     // Artifact 上：ページに与えられた Claude ランタイムを直接使う（ストリーミング表示）
