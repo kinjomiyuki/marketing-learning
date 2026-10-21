@@ -713,6 +713,242 @@
     .chat-panel { width: calc(100vw - 32px); height: min(520px, calc(100dvh - 120px)); }
   }
 
+
+  /* ---- redesign: home (learning-app patterns) ---- */
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stat {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 14px 18px;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .stat-num { font-size: 28px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1; }
+  .stat-label { font-size: 13px; color: #6b7280; font-weight: 500; }
+  .stat-due .stat-num { color: #d97706; }
+
+  .card-hero {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+    padding: 28px; margin-bottom: 28px; border: none; color: #fff;
+    background: radial-gradient(circle at 100% 0, rgba(110, 231, 183, 0.35), transparent 55%), linear-gradient(135deg, #059669, #064e3b);
+    box-shadow: 0 12px 32px rgba(5, 150, 105, 0.28);
+  }
+  .card-hero:hover { border: none; box-shadow: 0 16px 40px rgba(5, 150, 105, 0.36); }
+  .hero-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #a7f3d0; }
+  .hero-title { font-size: clamp(22px, 4.5vw, 26px); font-weight: 700; line-height: 1.35; }
+  .hero-desc { font-size: 14px; line-height: 1.8; color: #d1fae5; }
+  .hero-steps { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .hero-steps span { font-size: 12px; font-weight: 600; color: #ecfdf5; background: rgba(255, 255, 255, 0.14); border-radius: 9999px; padding: 4px 10px; }
+  .hero-cta { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+  .hero-btn {
+    display: inline-flex; align-items: center; gap: 6px; background: #fff; color: #047857;
+    font-weight: 700; font-size: 15px; padding: 12px 22px; border-radius: 9999px; min-height: 44px;
+  }
+  .hero-btn svg { width: 16px; height: 16px; transition: transform .2s ease; }
+  .card-hero:hover .hero-btn svg { transform: translateX(3px); }
+  .hero-time { font-size: 13px; color: #a7f3d0; }
+
+  .home-sub { font-size: 14px; font-weight: 700; color: #6b7280; letter-spacing: 0.04em; margin: 0 0 12px 0; }
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .card-mini { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 20px; }
+  .card-mini .icon-box { margin-bottom: 8px; }
+  .card-mini .card-title { font-size: 16px; margin: 0; }
+  .card-mini .card-desc { flex: 1; }
+  .card-mini .card-time { margin-top: 8px; }
+  @media (max-width: 640px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .card-mini { display: grid; grid-template-columns: 44px 1fr; column-gap: 14px; row-gap: 2px; align-items: start; }
+    .card-mini .icon-box { grid-row: 1 / span 4; margin: 0; }
+    .card-mini .card-time { justify-self: start; margin-top: 6px; }
+    .card-hero { padding: 22px; }
+    .stat { padding: 12px 14px; }
+  }
+
+
+
+  /* ---- redesign: basics course ---- */
+  .topic-head { margin-bottom: 20px; }
+  .topic-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
+  .topic-count { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; }
+  .topic-name { font-size: 15px; font-weight: 600; color: #111827; }
+  .topic-bar { height: 6px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; }
+  .topic-bar span { display: block; height: 100%; background: linear-gradient(90deg, #34d399, #059669); border-radius: 9999px; transition: width .4s ease; }
+
+  /* stepper: numbered circles joined by a line, completed steps get a check */
+  .step-bar { gap: 0; margin-bottom: 24px; }
+  .step-bar li {
+    position: relative; padding: 34px 2px 0; border-top: none;
+    font-size: 12px; line-height: 1.3;
+  }
+  .step-bar li::before {
+    content: counter(step); position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 26px; height: 26px; border-radius: 9999px; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; border: 2px solid #e5e7eb; color: #9ca3af; font-size: 12px; font-weight: 700;
+  }
+  .step-bar li::after {
+    content: ""; position: absolute; top: 12px; left: calc(-50% + 14px); right: calc(50% + 14px);
+    height: 2px; background: #e5e7eb;
+  }
+  .step-bar li:first-child::after { display: none; }
+  .step-bar li.done::before { content: "✓"; background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step-bar li.done::after, .step-bar li.current::after { background: var(--accent); }
+  .step-bar li.current::before { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18); }
+  .step-bar li.done, .step-bar li.current { color: #047857; }
+  .step-kicker {
+    display: inline-block; background: var(--accent-soft); color: var(--accent-dark);
+    border-radius: 9999px; padding: 3px 12px; margin-bottom: 12px;
+  }
+
+  /* intro: the method as a vertical timeline */
+  .method-intro { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #a7f3d0; }
+  .method-steps { list-style: none; margin: 12px 0 0; padding: 0; counter-reset: ms; }
+  .method-steps li { position: relative; padding: 0 0 18px 44px; counter-increment: ms; }
+  .method-steps li:last-child { padding-bottom: 0; }
+  .method-steps li::before {
+    content: counter(ms); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 9999px;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .method-steps li:not(:last-child)::after {
+    content: ""; position: absolute; left: 13px; top: 32px; bottom: 4px; width: 2px; background: #a7f3d0;
+  }
+
+  /* recall cards: flashcard feel */
+  .recall-card { border-radius: 16px; padding: 18px 20px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); }
+  .recall-word { font-size: 18px; }
+  .recall-card .recall-reveal { width: 100%; min-height: 44px; }
+
+  /* quiz: show right / wrong on the options */
+  .quiz-option.is-correct, .quiz-option.is-correct:has(input:checked) { background: #f0fdf4; border-color: var(--accent); color: #065f46; font-weight: 600; }
+  .quiz-option.is-wrong, .quiz-option.is-wrong:has(input:checked) { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+  .feedback-ng { background: #fffbeb; border-left-color: #f59e0b; }
+  .feedback-ng h4 { color: #b45309; }
+
+  /* result */
+  .result-card h2 {
+    font-size: 48px; line-height: 1.1; font-variant-numeric: tabular-nums;
+    background: linear-gradient(135deg, #10b981, #047857); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .point-block { border-radius: 0 16px 16px 0; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); }
+
+  @media (max-width: 640px) {
+    .step-bar li { font-size: 10px; padding: 34px 0 0; }
+    .step-bar li::before { display: flex; font-size: 12px; }
+    #basics-content > .button, #basics-feedback .button { width: 100%; }
+  }
+
+
+  /* ---- redesign: quiz & scenario ---- */
+  .score-chip { font-size: 12px; font-weight: 700; color: var(--accent-dark); background: var(--accent-soft); border-radius: 9999px; padding: 2px 10px; margin-left: auto; }
+  .quiz-option { position: relative; }
+  .quiz-option input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+  .quiz-option:has(input:disabled) { cursor: default; }
+  .opt-key {
+    flex: 0 0 28px; height: 28px; border-radius: 8px; background: #f3f4f6; color: #6b7280;
+    font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .quiz-option:hover .opt-key, .choice-button:hover .opt-key { background: #d1fae5; color: #047857; }
+  .quiz-option:has(input:checked) .opt-key, .choice-button.is-chosen .opt-key { background: var(--accent); color: #fff; }
+  .quiz-option.is-correct .opt-key { background: var(--accent); color: #fff; }
+  .quiz-option.is-wrong .opt-key { background: #f59e0b; color: #fff; }
+
+  .result-card h2.result-title { font-size: 26px; background: none; color: var(--accent); -webkit-text-fill-color: currentColor; }
+  .result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
+
+  .choice-button { display: flex; gap: 14px; align-items: flex-start; width: 100%; }
+  .choice-button:hover:not(:disabled) { transform: none; border-color: #6ee7b7; background: #f0fdf4; }
+  .choice-button:disabled { cursor: default; opacity: 0.55; }
+  .choice-button.is-chosen { opacity: 1; background: #f0fdf4; border-color: var(--accent); }
+  .scenario-sub { font-size: 16px; font-weight: 600; color: #111827; margin: 24px 0 12px; }
+  .metric-value { font-size: 24px; }
+  .metric-delta { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; border-radius: 9999px; padding: 2px 8px; font-variant-numeric: tabular-nums; }
+  .metric-delta.up { color: #047857; background: #d1fae5; }
+  .metric-delta.down { color: #b45309; background: #fef3c7; }
+
+
+  /* ---- redesign: socratic & review ---- */
+  .socratic-q { font-size: 17px; font-weight: 600; color: #111827; line-height: 1.8; margin: 0 0 16px 0; }
+  details.hints { padding: 0; }
+  details.hints summary { cursor: pointer; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--accent); list-style: none; }
+  details.hints summary::-webkit-details-marker { display: none; }
+  details.hints summary::before { content: "💡 "; }
+  details.hints ul { margin: 0 0 12px 36px; }
+  details.hints[open] summary { padding-bottom: 4px; }
+  details.hints[open] { padding-bottom: 10px; }
+  .input-meta { text-align: right; font-size: 12px; color: #9ca3af; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .field-error { color: #b45309; background: #fffbeb; border-radius: 10px; padding: 10px 14px; font-size: 13px; margin: 12px 0 0; }
+  .recap-answer { white-space: pre-wrap; }
+  .feedback-guide { border-left-color: #6366f1; background: #eef2ff; }
+  .feedback-guide h4 { color: #4338ca; }
+  .feedback-guide h4::before { content: "💬 "; }
+
+  .review-card { padding: 36px 28px; }
+  .review-word { font-size: 28px; margin: 8px 0 14px; }
+  .review-countdown {
+    width: 84px; height: 84px; margin: 12px auto 20px; border-radius: 9999px; font-size: 32px; color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle, #fff 58%, transparent 60%), conic-gradient(var(--accent) calc(var(--p, 100) * 1%), #e5e7eb 0);
+  }
+  .review-countdown[hidden] { display: none; }
+  .review-card .recall-def { font-size: 15px; padding: 14px 16px; }
+  .review-card .rate-row { flex-direction: column; }
+  .review-card .rate-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: none; width: 100%; }
+  .review-card .rate-btn small { font-size: 11px; font-weight: 500; opacity: 0.8; }
+  .review-card #review-reveal { width: 100%; min-height: 44px; }
+  @media (min-width: 641px) {
+    .review-card .rate-row { flex-direction: row; }
+    .review-card .rate-btn { flex: 1 1 0; }
+  }
+
+
+  /* ---- redesign: chat panel ---- */
+  .chat-fab { background: linear-gradient(135deg, #10b981, #047857); }
+  .chat-panel { border: none; border-radius: 24px; box-shadow: 0 16px 48px rgba(6, 78, 59, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.04); }
+  .chat-header { background: linear-gradient(135deg, #059669, #064e3b); padding: 14px 16px; gap: 12px; justify-content: flex-start; }
+  .chat-avatar { width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9999px; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center; }
+  .chat-avatar svg { width: 20px; height: 20px; }
+  .chat-title { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.3; }
+  .chat-title strong { font-size: 15px; }
+  .chat-title small { font-size: 11px; font-weight: 500; opacity: 0.8; }
+  .chat-messages { padding: 16px 16px 16px 12px; scroll-behavior: smooth; }
+  .chat-empty { margin: 8px 0 0 4px; text-align: left; font-size: 13px; color: #4b5563; }
+  .chat-empty p { margin: 0 0 12px; }
+  .chat-suggest { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chat-suggest button {
+    font-family: inherit; font-size: 13px; font-weight: 500; color: var(--accent-dark); background: #fff;
+    border: 1px solid #a7f3d0; border-radius: 9999px; padding: 8px 14px; cursor: pointer; min-height: 36px;
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+  .chat-suggest button:hover { background: var(--accent-soft); border-color: #6ee7b7; }
+
+  .chat-msg { font-size: 14px; line-height: 1.7; position: relative; }
+  .chat-msg.bot { margin-left: 32px; max-width: calc(100% - 44px); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); }
+  .chat-msg.bot::before {
+    content: ""; position: absolute; left: -32px; top: 0; width: 24px; height: 24px; border-radius: 9999px;
+    background: #059669 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 6.04A9 9 0 006 3.75c-1.05 0-2.06.18-3 .51v14.25A9 9 0 016 18c2.3 0 4.4.87 6 2.29m0-14.25a9 9 0 016-2.29c1.05 0 2.06.18 3 .51v14.25A9 9 0 0018 18a9 9 0 00-6 2.29m0-14.25v14.25'/></svg>") center / 14px no-repeat;
+  }
+  .chat-msg.user { background: linear-gradient(135deg, #10b981, #059669); }
+  /* typing indicator instead of the "考え中..." text */
+  .chat-msg.bot.pending { font-size: 0; font-style: normal; min-height: 38px; min-width: 56px; display: flex; align-items: center; gap: 4px; padding: 0 16px; }
+  .chat-msg.bot.pending::after {
+    content: ""; width: 6px; height: 6px; border-radius: 9999px; background: #9ca3af; flex: none;
+    box-shadow: 10px 0 0 #9ca3af, 20px 0 0 #9ca3af; margin-right: 20px;
+    animation: chatDots 1.2s ease-in-out infinite;
+  }
+  @keyframes chatDots { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+  .chat-input-row { align-items: flex-end; padding: 12px 12px 4px; }
+  .chat-input-row textarea { border-radius: 14px; padding: 10px 14px; line-height: 1.5; max-height: 96px; }
+  .chat-input-row textarea:focus { box-shadow: var(--ring); }
+  .chat-send { width: 40px; height: 40px; padding: 0; border-radius: 9999px; display: flex; align-items: center; justify-content: center; }
+  .chat-send svg { width: 18px; height: 18px; }
+  .chat-hint { flex-shrink: 0; background: #fff; text-align: center; font-size: 11px; color: #9ca3af; padding: 0 12px 10px; }
+  @media (max-width: 640px) {
+    .chat-hint { display: none; }
+    .chat-input-row { padding-bottom: 12px; }
+    .chat-panel { right: 8px; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 68px); width: calc(100vw - 16px); max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .chat-msg.bot.pending::after { animation: none; } }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -746,102 +982,60 @@
 
       <div id="review-banner"></div>
 
-      <div class="card-list">
+      <div id="home-stats"></div>
 
-        <button class="card" onclick="startBasics()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">BASICS</span>
-                <span class="tag-badge">基礎知識</span>
-              </div>
-              <h2 class="card-title">マーケティングの基礎を学ぶ</h2>
-              <p class="card-desc">パン屋「こむぎ堂」の立て直しストーリーで、STP・4P・CACやLTVなどが実際にどう使われるかを学びます。『脳が一生忘れないインプット術』の「思い出す」学び方（予想→読む→説明→用語の想起）で進め、日をあけた復習まで。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約20分</span>
-            </div>
-          </div>
+      <button class="card card-hero" onclick="startBasics()">
+        <span class="hero-kicker">おすすめ・はじめの一歩</span>
+        <span class="hero-title">マーケティングの基礎を学ぶ</span>
+        <span class="hero-desc">パン屋「こむぎ堂」の立て直しストーリーで、STP・4P・CACやLTVが実際にどう使われるかを学びます。「予想→読む→説明→用語を思い出す」の流れで、日をあけた復習まで。</span>
+        <span class="hero-steps" aria-hidden="true">
+          <span>1 予想</span><span>2 読む</span><span>3 説明</span><span>4 思い出す</span><span>5 クイズ</span>
+        </span>
+        <span class="hero-cta">
+          <span class="hero-btn">学習をはじめる
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </span>
+          <span class="hero-time">約20分</span>
+        </span>
+      </button>
+
+      <h2 class="home-sub">ほかの学習モード</h2>
+      <div class="card-grid">
+
+        <button class="card card-mini" onclick="startQuiz()">
+          <span class="icon-box">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+            </svg>
+          </span>
+          <span class="tag-label">QUIZ</span>
+          <span class="card-title">知識テスト</span>
+          <span class="card-desc">重要概念を問題で確認。すぐにフィードバックがもらえます。</span>
+          <span class="card-time">約10分</span>
         </button>
 
-        <button class="card" onclick="startQuiz()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">QUIZ</span>
-                <span class="tag-badge">知識テスト</span>
-              </div>
-              <h2 class="card-title">知識の定着度をすぐに確認</h2>
-              <p class="card-desc">マーケティングの重要概念を厳選した問題で確認します。即時フィードバックで理解のギャップを埋め、体系的な知識を固めましょう。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約10分</span>
-            </div>
-          </div>
+        <button class="card card-mini" onclick="startScenario()">
+          <span class="icon-box">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"></path>
+            </svg>
+          </span>
+          <span class="tag-label">SCENARIO</span>
+          <span class="card-title">意思決定を体験</span>
+          <span class="card-desc">戦略を選び、指標がどう変わるかをシミュレーション。</span>
+          <span class="card-time">約20分</span>
         </button>
 
-        <button class="card" onclick="startScenario()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">SCENARIO</span>
-                <span class="tag-badge">実践シミュレーション</span>
-              </div>
-              <h2 class="card-title">リアルな意思決定を体験する</h2>
-              <p class="card-desc">実際のビジネス課題をシミュレーションします。戦略を選択し、その結果としての指標変化を確認しながら、実践的な判断力を養いましょう。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約20分</span>
-            </div>
-          </div>
-        </button>
-
-        <button class="card" onclick="startSocratic()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">SOCRATIC</span>
-                <span class="tag-badge">思考力トレーニング</span>
-              </div>
-              <h2 class="card-title">問いを立てて考える力を磨く</h2>
-              <p class="card-desc">ガイド付きの対話形式で思考を深めます。マーケティング戦略の問いに自分の言葉で答えながら、論理的思考と応用力を鍛えましょう。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約15分</span>
-            </div>
-          </div>
+        <button class="card card-mini" onclick="startSocratic()">
+          <span class="icon-box">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
+            </svg>
+          </span>
+          <span class="tag-label">SOCRATIC</span>
+          <span class="card-title">問いで考える</span>
+          <span class="card-desc">ガイド付きの問いに自分の言葉で答え、思考力を鍛えます。</span>
+          <span class="card-time">約15分</span>
         </button>
 
       </div>
@@ -901,18 +1095,32 @@
   </svg>
 </button>
 
-<div class="chat-panel" id="chatPanel">
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="質問チャット">
   <div class="chat-header">
-    <span>質問チャット</span>
+    <span class="chat-avatar" aria-hidden="true">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path></svg>
+    </span>
+    <span class="chat-title"><strong>質問チャット</strong><small>マーケティングのこと、気軽にどうぞ</small></span>
     <button class="chat-close" onclick="toggleChat()" aria-label="閉じる">×</button>
   </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="chat-empty">マーケティングについて、いつでも気軽に質問してください。</div>
+  <div class="chat-messages" id="chatMessages" aria-live="polite">
+    <div class="chat-empty">
+      <p>わからない用語や、学習で気になったことを聞いてみましょう。</p>
+      <div class="chat-suggest">
+        <button onclick="askSuggestion('STPとは？')">STPとは？</button>
+        <button onclick="askSuggestion('4Pって何？')">4Pって何？</button>
+        <button onclick="askSuggestion('LTVとCACの違いは？')">LTVとCACの違いは？</button>
+        <button onclick="askSuggestion('リテンションとは？')">リテンションとは？</button>
+      </div>
+    </div>
   </div>
   <div class="chat-input-row">
-    <textarea id="chatInput" rows="1" placeholder="質問を入力..." onkeydown="handleChatKeydown(event)"></textarea>
-    <button class="chat-send" id="chatSendBtn" onclick="sendChatMessage()">送信</button>
+    <textarea id="chatInput" rows="1" placeholder="質問を入力..." aria-label="質問を入力" onkeydown="handleChatKeydown(event)" oninput="autosizeChat(this)"></textarea>
+    <button class="chat-send" id="chatSendBtn" onclick="sendChatMessage()" aria-label="送信">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.27 3.13a.75.75 0 011.03-.9l16.5 8.25a.75.75 0 010 1.34L4.3 19.97a.75.75 0 01-1.03-.9L6 12zm0 0h7.5"></path></svg>
+    </button>
   </div>
+  <div class="chat-hint">Enterで送信 ／ Shift+Enterで改行</div>
 </div>
 
 <script>
@@ -1346,7 +1554,10 @@
     function basicsHeader(index, step) {
         const mod = basicsModules[index];
         return `
-            <div class="progress">トピック ${index + 1} / ${basicsModules.length}：${mod.title}</div>
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">トピック ${index + 1} / ${basicsModules.length}</span><span class="topic-name">${mod.title}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round((index + step / BASICS_STEPS.length) / basicsModules.length * 100)}"><span style="width: ${(index + step / BASICS_STEPS.length) / basicsModules.length * 100}%"></span></div>
+            </div>
             <ol class="step-bar">
                 ${BASICS_STEPS.map((s, i) => `<li class="${i < step ? 'done' : i === step ? 'current' : ''}">${s}</li>`).join('')}
             </ol>
@@ -1638,7 +1849,7 @@
                     ${q.options.map((opt, i) => `
                         <label class="quiz-option">
                             <input type="radio" name="basics-quiz" value="${i}" onchange="submitBasicsAnswer(${index}, ${i})">
-                            ${opt}
+                            <span class="opt-key">${String.fromCharCode(65 + i)}</span><span>${opt}</span>
                         </label>
                     `).join('')}
                 </div>
@@ -1653,10 +1864,14 @@
         basicsAnswers[index] = isCorrect; // 戻って答え直しても二重に加点しない
         basicsScore = Object.values(basicsAnswers).filter(Boolean).length;
         document.querySelectorAll('input[name="basics-quiz"]').forEach(el => { el.disabled = true; });
+        document.querySelectorAll('.quiz-option').forEach((el, i) => {
+            if (i === q.correct) el.classList.add('is-correct');
+            else if (i === selected) el.classList.add('is-wrong');
+        });
 
         const isLast = index + 1 >= basicsModules.length;
         document.getElementById('basics-feedback').innerHTML = `
-            <div class="feedback">
+            <div class="feedback ${isCorrect ? '' : 'feedback-ng'}">
                 <h4>${isCorrect ? '✓ 正解' : '✗ 不正解'}</h4>
                 <p><strong>解説：</strong> ${q.explanation}</p>
             </div>
@@ -1701,9 +1916,24 @@
         return Object.keys(cards).filter(id => cards[id].due <= now).map(id => Object.assign({ id }, cards[id]));
     }
 
+    // ホームの進捗サマリー。保存された復習カードから「覚えた用語」と「今日の復習」を数える（なければ表示しない）
+    function renderHomeStats() {
+        const el = document.getElementById('home-stats');
+        if (!el) return;
+        const total = Object.keys(store.get(REVIEW_KEY, {})).length;
+        if (!total) { el.innerHTML = ''; return; }
+        const due = dueReviewCards().length;
+        el.innerHTML = `
+            <div class="stats-row">
+                <div class="stat"><span class="stat-num">${total}</span><span class="stat-label">学んだ用語</span></div>
+                <div class="stat ${due ? 'stat-due' : ''}"><span class="stat-num">${due}</span><span class="stat-label">今日の復習</span></div>
+            </div>`;
+    }
+
     function renderReviewBanner() {
         const el = document.getElementById('review-banner');
         if (!el) return;
+        renderHomeStats();
         const cards = store.get(REVIEW_KEY, {});
         const ids = Object.keys(cards);
         if (!ids.length) { el.innerHTML = ''; return; }
@@ -1752,24 +1982,27 @@
         if (reviewPos >= reviewQueue.length) {
             box.innerHTML = `
                 <div class="result-card">
-                    <h2>おつかれさまでした</h2>
-                    <p>今日の復習は完了です。思い出せた用語は、次はもっと間をあけて出てきます。</p>
-                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                    <h2 class="result-title">おつかれさまでした</h2>
+                    <p><strong>${reviewQueue.length}語を復習しました</strong><br>思い出せた用語は、次はもっと間をあけて出てきます。</p>
+                    <div class="result-actions"><button class="button" onclick="goHome()">ホームに戻る</button></div>
                 </div>`;
             return;
         }
         const c = reviewQueue[reviewPos];
         box.innerHTML = `
-            <div class="progress">${reviewPos + 1} / ${reviewQueue.length}</div>
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">${reviewPos + 1} / ${reviewQueue.length}</span><span class="topic-name">今日の復習</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(reviewPos / reviewQueue.length * 100)}"><span style="width: ${reviewPos / reviewQueue.length * 100}%"></span></div>
+            </div>
             <div class="question-container review-card">
                 <div class="step-kicker">5秒リトリーバル</div>
                 <div class="recall-word review-word">${c.word}</div>
                 <p class="review-hint" id="review-hint">この用語の意味を、頭の中で言ってみましょう</p>
-                <div class="review-countdown" id="review-countdown">5</div>
+                <div class="review-countdown" id="review-countdown" style="--p: 100">5</div>
                 <div class="recall-def" id="review-def" hidden>${c.def}</div>
                 <div class="rate-row" id="review-rate" hidden>
-                    <button class="rate-btn rate-ok" onclick="rateReview(true)">思い出せた</button>
-                    <button class="rate-btn rate-ng" onclick="rateReview(false)">思い出せなかった</button>
+                    <button class="rate-btn rate-ok" onclick="rateReview(true)">思い出せた<small>次は${REVIEW_INTERVALS[Math.min((c.stage || 0) + 1, REVIEW_INTERVALS.length - 1)]}日後</small></button>
+                    <button class="rate-btn rate-ng" onclick="rateReview(false)">思い出せなかった<small>明日もう一度</small></button>
                 </div>
                 <button class="button-ghost" id="review-reveal" onclick="revealReview()">答えを見る</button>
             </div>`;
@@ -1782,6 +2015,7 @@
                 revealReview();
             } else {
                 cd.textContent = left;
+                cd.style.setProperty('--p', left / 5 * 100);
             }
         }, 1000);
     }
@@ -1823,27 +2057,37 @@
         if (index >= socraticQuestions.length) {
             document.getElementById('socratic-content').innerHTML = `
                 <div class="result-card">
-                    <h2>セッション完了</h2>
+                    <h2 class="result-title">セッション完了</h2>
                     <p>ソクラテス対話シリーズを完了しました。継続的な練習を通じて戦略的思考を発展させてください。</p>
-                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                    <div class="result-actions"><button class="button" onclick="goHome()">ホームに戻る</button></div>
                 </div>
+                <details class="reread">
+                    <summary>あなたの回答を振り返る</summary>
+                    ${socraticQuestions.map((sq, i) => socraticAnswers[i] ? `
+                        <div class="predict-recap"><span class="point-label">問 ${i + 1}</span><p>${escapeHtml(sq.question)}</p><p class="recap-answer">${escapeHtml(socraticAnswers[i])}</p></div>` : '').join('')}
+                </details>
             `;
             return;
         }
 
         const q = socraticQuestions[index];
         let html = `
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">問 ${index + 1} / ${socraticQuestions.length}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(index / socraticQuestions.length * 100)}"><span style="width: ${index / socraticQuestions.length * 100}%"></span></div>
+            </div>
             <div class="question-container">
-                <h3>問 ${index + 1} / ${socraticQuestions.length}</h3>
-                <p>${q.question}</p>
-                <div class="hints">
-                    <strong>考えるヒント:</strong>
+                <div class="step-kicker">THINK　自分の言葉で考える</div>
+                <p class="socratic-q">${q.question}</p>
+                <details class="hints">
+                    <summary>考えるヒントを見る</summary>
                     <ul>
                         ${q.hints.map(h => `<li>${h}</li>`).join('')}
                     </ul>
-                </div>
+                </details>
                 <div class="input-area">
-                    <textarea id="socratic-answer" placeholder="あなたの分析を共有してください...">${escapeHtml(socraticAnswers[index] || '')}</textarea>
+                    <textarea id="socratic-answer" placeholder="あなたの分析を共有してください..." oninput="document.getElementById('socratic-count').textContent = this.value.length + '文字'">${escapeHtml(socraticAnswers[index] || '')}</textarea>
+                    <div class="input-meta"><span id="socratic-count">${(socraticAnswers[index] || '').length}文字</span></div>
                 </div>
                 <button class="button" onclick="submitSocraticAnswer(${index})">回答を送信</button>
                 <div id="socratic-feedback"></div>
@@ -1855,17 +2099,20 @@
     function submitSocraticAnswer(index) {
         const answer = document.getElementById('socratic-answer').value;
         if (!answer.trim()) {
-            alert('回答を入力してください');
+            document.getElementById('socratic-feedback').innerHTML = '<p class="field-error" role="alert">回答を入力してから送信してください（短くてもかまいません）。</p>';
+            document.getElementById('socratic-answer').focus();
             return;
         }
         socraticAnswers[index] = answer;
 
+        const isLast = index + 1 >= socraticQuestions.length;
         const feedback = `
-            <div class="feedback">
-                <h4>フィードバック</h4>
+            <div class="predict-recap"><span class="point-label">あなたの回答</span><p class="recap-answer">${escapeHtml(answer)}</p></div>
+            <div class="feedback feedback-guide">
+                <h4>ガイドからの視点</h4>
                 <p>${socraticResponses[index]}</p>
             </div>
-            <button class="button" onclick="displaySocraticQuestion(${index + 1})" style="margin-top: 20px;">次の問題</button>
+            <button class="button" onclick="displaySocraticQuestion(${index + 1})" style="margin-top: 20px;">${isLast ? '完了する' : '次の問題'}</button>
         `;
         document.getElementById('socratic-feedback').innerHTML = feedback;
     }
@@ -1905,15 +2152,22 @@
             document.getElementById('quiz-content').innerHTML = `
                 <div class="result-card">
                     <h2>${percentage}%</h2>
-                    <p>スコア：${quizScore} / ${quizQuestions.length} 正解</p>
-                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                    <p><strong>${quizScore} / ${quizQuestions.length} 問 正解</strong><br>${percentage >= 80 ? 'すばらしい理解度です。シナリオモードで実践してみましょう。' : percentage >= 50 ? 'あと一歩です。間違えた問題の解説を読み返して、もう一度挑戦してみましょう。' : '基礎講座で用語を確認してから、もう一度挑戦してみましょう。'}</p>
+                    <div class="result-actions">
+                        <button class="button" onclick="startQuiz()">もう一度挑戦</button>
+                        <button class="button-ghost" onclick="goHome()">ホームに戻る</button>
+                    </div>
                 </div>
             `;
             return;
         }
 
         const q = quizQuestions[currentQuizIndex];
-        const progress = `<div class="progress">問 ${currentQuizIndex + 1} / ${quizQuestions.length} | スコア：${quizScore}</div>`;
+        const progress = `
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">問 ${currentQuizIndex + 1} / ${quizQuestions.length}</span><span class="score-chip">正解 ${quizScore}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(currentQuizIndex / quizQuestions.length * 100)}"><span style="width: ${currentQuizIndex / quizQuestions.length * 100}%"></span></div>
+            </div>`;
 
         let html = progress + `
             <div class="question-container">
@@ -1922,7 +2176,7 @@
                     ${q.options.map((opt, i) => `
                         <label class="quiz-option">
                             <input type="radio" name="quiz" value="${i}" onchange="submitQuizAnswer(${i}, ${q.correct}, '${q.explanation}')">
-                            ${opt}
+                            <span class="opt-key">${String.fromCharCode(65 + i)}</span><span>${opt}</span>
                         </label>
                     `).join('')}
                 </div>
@@ -1943,12 +2197,17 @@
         quizResults[currentQuizIndex] = isCorrect;
         if (isCorrect) quizScore++;
 
+        document.querySelectorAll('#quiz-content .quiz-option').forEach((el, i) => {
+            el.classList.toggle('is-correct', i === correct);
+            el.classList.toggle('is-wrong', i === selected && !isCorrect);
+        });
+        const isLast = currentQuizIndex + 1 >= quizQuestions.length;
         const feedback = `
-            <div class="feedback">
+            <div class="feedback ${isCorrect ? '' : 'feedback-ng'}">
                 <h4>${isCorrect ? '✓ 正解' : '✗ 不正解'}</h4>
                 <p><strong>説明：</strong> ${explanation}</p>
             </div>
-            <button class="button" onclick="nextQuizQuestion()" style="margin-top: 20px;">次の問題</button>
+            <button class="button" onclick="nextQuizQuestion()" style="margin-top: 20px;">${isLast ? '結果を見る' : '次の問題'}</button>
         `;
         document.getElementById('quiz-feedback').innerHTML = feedback;
     }
@@ -1966,11 +2225,25 @@
         displayScenario();
     }
 
+    const METRIC_LABELS = {
+        awareness: '市場認知度', leads: '適格リード', customers: 'コンバージョン顧客', budget: '残り予算',
+        retentionRate: '維持率 %', satisfactionScore: '満足度 (1-10)', activeCustomers: 'アクティブ顧客'
+    };
+
+    // 指標タイル。deltas を渡すと、選択による増減（+/−）を表示する
+    function scenarioMetricsHtml(state, deltas) {
+        return Object.entries(state).map(([key, value]) => {
+            const d = deltas && deltas[key];
+            const delta = d ? `<div class="metric-delta ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲ +' : '▼ '}${d}</div>` : '';
+            return `<div class="metric"><div class="metric-label">${METRIC_LABELS[key] || key}</div><div class="metric-value">${value}</div>${delta}</div>`;
+        }).join('');
+    }
+
     function displayScenario() {
         if (currentScenarioIndex >= scenarios.length) {
             document.getElementById('scenario-content').innerHTML = `
                 <div class="result-card">
-                    <h2>シナリオシリーズ完了</h2>
+                    <h2 class="result-title">シナリオシリーズ完了</h2>
                     <p>すべての戦略シナリオを完了しました。これらの洞察を実世界のマーケティング課題に適用してください。</p>
                     <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
                 </div>
@@ -1981,23 +2254,15 @@
         const scenario = scenarios[currentScenarioIndex];
         currentScenarioState = JSON.parse(JSON.stringify(scenario.metrics));
 
-        let metricsHtml = '';
-        for (const [key, value] of Object.entries(currentScenarioState)) {
-            let label = key;
-            if (key === 'awareness') label = '市場認知度';
-            else if (key === 'leads') label = '適格リード';
-            else if (key === 'customers') label = 'コンバージョン顧客';
-            else if (key === 'budget') label = '残り予算';
-            else if (key === 'retentionRate') label = '維持率 %';
-            else if (key === 'satisfactionScore') label = '満足度 (1-10)';
-            else if (key === 'activeCustomers') label = 'アクティブ顧客';
-
-            metricsHtml += `<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div></div>`;
-        }
+        const metricsHtml = scenarioMetricsHtml(currentScenarioState);
 
         let html = `
-            <div class="progress">シナリオ ${currentScenarioIndex + 1} / ${scenarios.length}</div>
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">シナリオ ${currentScenarioIndex + 1} / ${scenarios.length}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(currentScenarioIndex / scenarios.length * 100)}"><span style="width: ${currentScenarioIndex / scenarios.length * 100}%"></span></div>
+            </div>
             <div class="question-container">
+                <div class="step-kicker">SITUATION</div>
                 <h3>${scenario.title}</h3>
                 <p>${scenario.description}</p>
                 <div class="metrics-grid">${metricsHtml}</div>
@@ -2007,7 +2272,7 @@
                 <h3 style="color: #111827; font-size: 16px; font-weight: 600; margin-bottom: 16px;">戦略的選択肢</h3>
                 <div class="scenario-choices">
                     ${scenario.choices.map((choice, i) => `
-                        <button class="choice-button" onclick="submitScenarioChoice(${i})">${choice.text}</button>
+                        <button class="choice-button" onclick="submitScenarioChoice(${i})"><span class="opt-key">${String.fromCharCode(65 + i)}</span><span>${choice.text}</span></button>
                     `).join('')}
                 </div>
             </div>
@@ -2021,31 +2286,23 @@
         const scenario = scenarios[currentScenarioIndex];
         const choice = scenario.choices[choiceIndex];
         const effects = choice.effects;
+        document.querySelectorAll('#scenario-content .choice-button').forEach((el, i) => {
+            el.disabled = true;
+            if (i === choiceIndex) el.classList.add('is-chosen');
+        });
 
         for (const [key, value] of Object.entries(effects)) {
             currentScenarioState[key] += value;
         }
 
-        let metricsHtml = '';
-        for (const [key, value] of Object.entries(currentScenarioState)) {
-            let label = key;
-            if (key === 'awareness') label = '市場認知度';
-            else if (key === 'leads') label = '適格リード';
-            else if (key === 'customers') label = 'コンバージョン顧客';
-            else if (key === 'budget') label = '残り予算';
-            else if (key === 'retentionRate') label = '維持率 %';
-            else if (key === 'satisfactionScore') label = '満足度 (1-10)';
-            else if (key === 'activeCustomers') label = 'アクティブ顧客';
-
-            metricsHtml += `<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div></div>`;
-        }
+        const metricsHtml = scenarioMetricsHtml(currentScenarioState, effects);
 
         const feedback = `
             <div class="feedback">
                 <h4>戦略分析</h4>
                 <p>${choice.explanation}</p>
             </div>
-            <h3 style="color: #111827; font-size: 16px; font-weight: 600; margin-top: 24px; margin-bottom: 12px;">更新されたメトリクス</h3>
+            <h3 class="scenario-sub">更新された指標（選択による変化）</h3>
             <div class="metrics-grid">${metricsHtml}</div>
             <button class="button" onclick="nextScenario()" style="margin-top: 20px;">シナリオシリーズを続行</button>
         `;
@@ -2086,6 +2343,20 @@
         }
     }
 
+    function autosizeChat(el) {
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 96) + 'px';
+    }
+
+    function askSuggestion(text) {
+        document.getElementById('chatInput').value = text;
+        sendChatMessage();
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.getElementById('chatPanel').classList.contains('open')) toggleChat();
+    });
+
     function handleChatKeydown(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -2112,6 +2383,7 @@
         const sendBtn = document.getElementById('chatSendBtn');
 
         input.value = '';
+        input.style.height = '';
         appendChatMessage('user', text);
         chatHistory.push({ role: 'user', content: text });
         sendBtn.disabled = true;
