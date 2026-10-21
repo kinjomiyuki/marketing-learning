@@ -713,6 +713,58 @@
     .chat-panel { width: calc(100vw - 32px); height: min(520px, calc(100dvh - 120px)); }
   }
 
+
+  /* ---- redesign: home (learning-app patterns) ---- */
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stat {
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 14px 18px;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .stat-num { font-size: 28px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1; }
+  .stat-label { font-size: 13px; color: #6b7280; font-weight: 500; }
+  .stat-due .stat-num { color: #d97706; }
+
+  .card-hero {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+    padding: 28px; margin-bottom: 28px; border: none; color: #fff;
+    background: radial-gradient(circle at 100% 0, rgba(110, 231, 183, 0.35), transparent 55%), linear-gradient(135deg, #059669, #064e3b);
+    box-shadow: 0 12px 32px rgba(5, 150, 105, 0.28);
+  }
+  .card-hero:hover { border: none; box-shadow: 0 16px 40px rgba(5, 150, 105, 0.36); }
+  .hero-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #a7f3d0; }
+  .hero-title { font-size: clamp(22px, 4.5vw, 26px); font-weight: 700; line-height: 1.35; }
+  .hero-desc { font-size: 14px; line-height: 1.8; color: #d1fae5; }
+  .hero-steps { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .hero-steps span { font-size: 12px; font-weight: 600; color: #ecfdf5; background: rgba(255, 255, 255, 0.14); border-radius: 9999px; padding: 4px 10px; }
+  .hero-cta { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+  .hero-btn {
+    display: inline-flex; align-items: center; gap: 6px; background: #fff; color: #047857;
+    font-weight: 700; font-size: 15px; padding: 12px 22px; border-radius: 9999px; min-height: 44px;
+  }
+  .hero-btn svg { width: 16px; height: 16px; transition: transform .2s ease; }
+  .card-hero:hover .hero-btn svg { transform: translateX(3px); }
+  .hero-time { font-size: 13px; color: #a7f3d0; }
+
+  .home-sub { font-size: 14px; font-weight: 700; color: #6b7280; letter-spacing: 0.04em; margin: 0 0 12px 0; }
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .card-mini { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 20px; }
+  .card-mini .icon-box { margin-bottom: 8px; }
+  .card-mini .card-title { font-size: 16px; margin: 0; }
+  .card-mini .card-desc { flex: 1; }
+  .card-mini .card-time { margin-top: 8px; }
+  @media (max-width: 640px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .card-mini { display: grid; grid-template-columns: 44px 1fr; column-gap: 14px; row-gap: 2px; align-items: start; }
+    .card-mini .icon-box { grid-row: 1 / span 4; margin: 0; }
+    .card-mini .card-time { justify-self: start; margin-top: 6px; }
+    .card-hero { padding: 22px; }
+    .stat { padding: 12px 14px; }
+  }
+
+  /* step bar: completed steps get a check (clearer progress) */
+  .step-bar li.done::before { content: "✓ "; }
+  @media (max-width: 640px) { .step-bar li.done::before { content: "✓"; } }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -746,102 +798,60 @@
 
       <div id="review-banner"></div>
 
-      <div class="card-list">
+      <div id="home-stats"></div>
 
-        <button class="card" onclick="startBasics()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">BASICS</span>
-                <span class="tag-badge">基礎知識</span>
-              </div>
-              <h2 class="card-title">マーケティングの基礎を学ぶ</h2>
-              <p class="card-desc">パン屋「こむぎ堂」の立て直しストーリーで、STP・4P・CACやLTVなどが実際にどう使われるかを学びます。『脳が一生忘れないインプット術』の「思い出す」学び方（予想→読む→説明→用語の想起）で進め、日をあけた復習まで。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約20分</span>
-            </div>
-          </div>
+      <button class="card card-hero" onclick="startBasics()">
+        <span class="hero-kicker">おすすめ・はじめの一歩</span>
+        <span class="hero-title">マーケティングの基礎を学ぶ</span>
+        <span class="hero-desc">パン屋「こむぎ堂」の立て直しストーリーで、STP・4P・CACやLTVが実際にどう使われるかを学びます。「予想→読む→説明→用語を思い出す」の流れで、日をあけた復習まで。</span>
+        <span class="hero-steps" aria-hidden="true">
+          <span>1 予想</span><span>2 読む</span><span>3 説明</span><span>4 思い出す</span><span>5 クイズ</span>
+        </span>
+        <span class="hero-cta">
+          <span class="hero-btn">学習をはじめる
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </span>
+          <span class="hero-time">約20分</span>
+        </span>
+      </button>
+
+      <h2 class="home-sub">ほかの学習モード</h2>
+      <div class="card-grid">
+
+        <button class="card card-mini" onclick="startQuiz()">
+          <span class="icon-box">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+            </svg>
+          </span>
+          <span class="tag-label">QUIZ</span>
+          <span class="card-title">知識テスト</span>
+          <span class="card-desc">重要概念を問題で確認。すぐにフィードバックがもらえます。</span>
+          <span class="card-time">約10分</span>
         </button>
 
-        <button class="card" onclick="startQuiz()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">QUIZ</span>
-                <span class="tag-badge">知識テスト</span>
-              </div>
-              <h2 class="card-title">知識の定着度をすぐに確認</h2>
-              <p class="card-desc">マーケティングの重要概念を厳選した問題で確認します。即時フィードバックで理解のギャップを埋め、体系的な知識を固めましょう。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約10分</span>
-            </div>
-          </div>
+        <button class="card card-mini" onclick="startScenario()">
+          <span class="icon-box">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"></path>
+            </svg>
+          </span>
+          <span class="tag-label">SCENARIO</span>
+          <span class="card-title">意思決定を体験</span>
+          <span class="card-desc">戦略を選び、指標がどう変わるかをシミュレーション。</span>
+          <span class="card-time">約20分</span>
         </button>
 
-        <button class="card" onclick="startScenario()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">SCENARIO</span>
-                <span class="tag-badge">実践シミュレーション</span>
-              </div>
-              <h2 class="card-title">リアルな意思決定を体験する</h2>
-              <p class="card-desc">実際のビジネス課題をシミュレーションします。戦略を選択し、その結果としての指標変化を確認しながら、実践的な判断力を養いましょう。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約20分</span>
-            </div>
-          </div>
-        </button>
-
-        <button class="card" onclick="startSocratic()">
-          <div class="card-row">
-            <div class="icon-box">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
-              </svg>
-            </div>
-            <div class="card-body">
-              <div class="tag-row">
-                <span class="tag-label">SOCRATIC</span>
-                <span class="tag-badge">思考力トレーニング</span>
-              </div>
-              <h2 class="card-title">問いを立てて考える力を磨く</h2>
-              <p class="card-desc">ガイド付きの対話形式で思考を深めます。マーケティング戦略の問いに自分の言葉で答えながら、論理的思考と応用力を鍛えましょう。</p>
-            </div>
-            <div class="card-side">
-              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-              <span class="card-time">約15分</span>
-            </div>
-          </div>
+        <button class="card card-mini" onclick="startSocratic()">
+          <span class="icon-box">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"></path>
+            </svg>
+          </span>
+          <span class="tag-label">SOCRATIC</span>
+          <span class="card-title">問いで考える</span>
+          <span class="card-desc">ガイド付きの問いに自分の言葉で答え、思考力を鍛えます。</span>
+          <span class="card-time">約15分</span>
         </button>
 
       </div>
@@ -1701,9 +1711,24 @@
         return Object.keys(cards).filter(id => cards[id].due <= now).map(id => Object.assign({ id }, cards[id]));
     }
 
+    // ホームの進捗サマリー。保存された復習カードから「覚えた用語」と「今日の復習」を数える（なければ表示しない）
+    function renderHomeStats() {
+        const el = document.getElementById('home-stats');
+        if (!el) return;
+        const total = Object.keys(store.get(REVIEW_KEY, {})).length;
+        if (!total) { el.innerHTML = ''; return; }
+        const due = dueReviewCards().length;
+        el.innerHTML = `
+            <div class="stats-row">
+                <div class="stat"><span class="stat-num">${total}</span><span class="stat-label">学んだ用語</span></div>
+                <div class="stat ${due ? 'stat-due' : ''}"><span class="stat-num">${due}</span><span class="stat-label">今日の復習</span></div>
+            </div>`;
+    }
+
     function renderReviewBanner() {
         const el = document.getElementById('review-banner');
         if (!el) return;
+        renderHomeStats();
         const cards = store.get(REVIEW_KEY, {});
         const ids = Object.keys(cards);
         if (!ids.length) { el.innerHTML = ''; return; }
