@@ -835,6 +835,35 @@
     #basics-content > .button, #basics-feedback .button { width: 100%; }
   }
 
+
+  /* ---- redesign: quiz & scenario ---- */
+  .score-chip { font-size: 12px; font-weight: 700; color: var(--accent-dark); background: var(--accent-soft); border-radius: 9999px; padding: 2px 10px; margin-left: auto; }
+  .quiz-option { position: relative; }
+  .quiz-option input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+  .quiz-option:has(input:disabled) { cursor: default; }
+  .opt-key {
+    flex: 0 0 28px; height: 28px; border-radius: 8px; background: #f3f4f6; color: #6b7280;
+    font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .quiz-option:hover .opt-key, .choice-button:hover .opt-key { background: #d1fae5; color: #047857; }
+  .quiz-option:has(input:checked) .opt-key, .choice-button.is-chosen .opt-key { background: var(--accent); color: #fff; }
+  .quiz-option.is-correct .opt-key { background: var(--accent); color: #fff; }
+  .quiz-option.is-wrong .opt-key { background: #f59e0b; color: #fff; }
+
+  .result-card h2.result-title { font-size: 26px; background: none; color: var(--accent); -webkit-text-fill-color: currentColor; }
+  .result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
+
+  .choice-button { display: flex; gap: 14px; align-items: flex-start; width: 100%; }
+  .choice-button:hover:not(:disabled) { transform: none; border-color: #6ee7b7; background: #f0fdf4; }
+  .choice-button:disabled { cursor: default; opacity: 0.55; }
+  .choice-button.is-chosen { opacity: 1; background: #f0fdf4; border-color: var(--accent); }
+  .scenario-sub { font-size: 16px; font-weight: 600; color: #111827; margin: 24px 0 12px; }
+  .metric-value { font-size: 24px; }
+  .metric-delta { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; border-radius: 9999px; padding: 2px 8px; font-variant-numeric: tabular-nums; }
+  .metric-delta.up { color: #047857; background: #d1fae5; }
+  .metric-delta.down { color: #b45309; background: #fef3c7; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -1721,7 +1750,7 @@
                     ${q.options.map((opt, i) => `
                         <label class="quiz-option">
                             <input type="radio" name="basics-quiz" value="${i}" onchange="submitBasicsAnswer(${index}, ${i})">
-                            ${opt}
+                            <span class="opt-key">${String.fromCharCode(65 + i)}</span><span>${opt}</span>
                         </label>
                     `).join('')}
                 </div>
@@ -1925,7 +1954,7 @@
         if (index >= socraticQuestions.length) {
             document.getElementById('socratic-content').innerHTML = `
                 <div class="result-card">
-                    <h2>セッション完了</h2>
+                    <h2 class="result-title">セッション完了</h2>
                     <p>ソクラテス対話シリーズを完了しました。継続的な練習を通じて戦略的思考を発展させてください。</p>
                     <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
                 </div>
@@ -2007,15 +2036,22 @@
             document.getElementById('quiz-content').innerHTML = `
                 <div class="result-card">
                     <h2>${percentage}%</h2>
-                    <p>スコア：${quizScore} / ${quizQuestions.length} 正解</p>
-                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                    <p><strong>${quizScore} / ${quizQuestions.length} 問 正解</strong><br>${percentage >= 80 ? 'すばらしい理解度です。シナリオモードで実践してみましょう。' : percentage >= 50 ? 'あと一歩です。間違えた問題の解説を読み返して、もう一度挑戦してみましょう。' : '基礎講座で用語を確認してから、もう一度挑戦してみましょう。'}</p>
+                    <div class="result-actions">
+                        <button class="button" onclick="startQuiz()">もう一度挑戦</button>
+                        <button class="button-ghost" onclick="goHome()">ホームに戻る</button>
+                    </div>
                 </div>
             `;
             return;
         }
 
         const q = quizQuestions[currentQuizIndex];
-        const progress = `<div class="progress">問 ${currentQuizIndex + 1} / ${quizQuestions.length} | スコア：${quizScore}</div>`;
+        const progress = `
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">問 ${currentQuizIndex + 1} / ${quizQuestions.length}</span><span class="score-chip">正解 ${quizScore}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(currentQuizIndex / quizQuestions.length * 100)}"><span style="width: ${currentQuizIndex / quizQuestions.length * 100}%"></span></div>
+            </div>`;
 
         let html = progress + `
             <div class="question-container">
@@ -2024,7 +2060,7 @@
                     ${q.options.map((opt, i) => `
                         <label class="quiz-option">
                             <input type="radio" name="quiz" value="${i}" onchange="submitQuizAnswer(${i}, ${q.correct}, '${q.explanation}')">
-                            ${opt}
+                            <span class="opt-key">${String.fromCharCode(65 + i)}</span><span>${opt}</span>
                         </label>
                     `).join('')}
                 </div>
@@ -2045,12 +2081,17 @@
         quizResults[currentQuizIndex] = isCorrect;
         if (isCorrect) quizScore++;
 
+        document.querySelectorAll('#quiz-content .quiz-option').forEach((el, i) => {
+            el.classList.toggle('is-correct', i === correct);
+            el.classList.toggle('is-wrong', i === selected && !isCorrect);
+        });
+        const isLast = currentQuizIndex + 1 >= quizQuestions.length;
         const feedback = `
-            <div class="feedback">
+            <div class="feedback ${isCorrect ? '' : 'feedback-ng'}">
                 <h4>${isCorrect ? '✓ 正解' : '✗ 不正解'}</h4>
                 <p><strong>説明：</strong> ${explanation}</p>
             </div>
-            <button class="button" onclick="nextQuizQuestion()" style="margin-top: 20px;">次の問題</button>
+            <button class="button" onclick="nextQuizQuestion()" style="margin-top: 20px;">${isLast ? '結果を見る' : '次の問題'}</button>
         `;
         document.getElementById('quiz-feedback').innerHTML = feedback;
     }
@@ -2068,11 +2109,25 @@
         displayScenario();
     }
 
+    const METRIC_LABELS = {
+        awareness: '市場認知度', leads: '適格リード', customers: 'コンバージョン顧客', budget: '残り予算',
+        retentionRate: '維持率 %', satisfactionScore: '満足度 (1-10)', activeCustomers: 'アクティブ顧客'
+    };
+
+    // 指標タイル。deltas を渡すと、選択による増減（+/−）を表示する
+    function scenarioMetricsHtml(state, deltas) {
+        return Object.entries(state).map(([key, value]) => {
+            const d = deltas && deltas[key];
+            const delta = d ? `<div class="metric-delta ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲ +' : '▼ '}${d}</div>` : '';
+            return `<div class="metric"><div class="metric-label">${METRIC_LABELS[key] || key}</div><div class="metric-value">${value}</div>${delta}</div>`;
+        }).join('');
+    }
+
     function displayScenario() {
         if (currentScenarioIndex >= scenarios.length) {
             document.getElementById('scenario-content').innerHTML = `
                 <div class="result-card">
-                    <h2>シナリオシリーズ完了</h2>
+                    <h2 class="result-title">シナリオシリーズ完了</h2>
                     <p>すべての戦略シナリオを完了しました。これらの洞察を実世界のマーケティング課題に適用してください。</p>
                     <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
                 </div>
@@ -2083,23 +2138,15 @@
         const scenario = scenarios[currentScenarioIndex];
         currentScenarioState = JSON.parse(JSON.stringify(scenario.metrics));
 
-        let metricsHtml = '';
-        for (const [key, value] of Object.entries(currentScenarioState)) {
-            let label = key;
-            if (key === 'awareness') label = '市場認知度';
-            else if (key === 'leads') label = '適格リード';
-            else if (key === 'customers') label = 'コンバージョン顧客';
-            else if (key === 'budget') label = '残り予算';
-            else if (key === 'retentionRate') label = '維持率 %';
-            else if (key === 'satisfactionScore') label = '満足度 (1-10)';
-            else if (key === 'activeCustomers') label = 'アクティブ顧客';
-
-            metricsHtml += `<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div></div>`;
-        }
+        const metricsHtml = scenarioMetricsHtml(currentScenarioState);
 
         let html = `
-            <div class="progress">シナリオ ${currentScenarioIndex + 1} / ${scenarios.length}</div>
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">シナリオ ${currentScenarioIndex + 1} / ${scenarios.length}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(currentScenarioIndex / scenarios.length * 100)}"><span style="width: ${currentScenarioIndex / scenarios.length * 100}%"></span></div>
+            </div>
             <div class="question-container">
+                <div class="step-kicker">SITUATION</div>
                 <h3>${scenario.title}</h3>
                 <p>${scenario.description}</p>
                 <div class="metrics-grid">${metricsHtml}</div>
@@ -2109,7 +2156,7 @@
                 <h3 style="color: #111827; font-size: 16px; font-weight: 600; margin-bottom: 16px;">戦略的選択肢</h3>
                 <div class="scenario-choices">
                     ${scenario.choices.map((choice, i) => `
-                        <button class="choice-button" onclick="submitScenarioChoice(${i})">${choice.text}</button>
+                        <button class="choice-button" onclick="submitScenarioChoice(${i})"><span class="opt-key">${String.fromCharCode(65 + i)}</span><span>${choice.text}</span></button>
                     `).join('')}
                 </div>
             </div>
@@ -2123,31 +2170,23 @@
         const scenario = scenarios[currentScenarioIndex];
         const choice = scenario.choices[choiceIndex];
         const effects = choice.effects;
+        document.querySelectorAll('#scenario-content .choice-button').forEach((el, i) => {
+            el.disabled = true;
+            if (i === choiceIndex) el.classList.add('is-chosen');
+        });
 
         for (const [key, value] of Object.entries(effects)) {
             currentScenarioState[key] += value;
         }
 
-        let metricsHtml = '';
-        for (const [key, value] of Object.entries(currentScenarioState)) {
-            let label = key;
-            if (key === 'awareness') label = '市場認知度';
-            else if (key === 'leads') label = '適格リード';
-            else if (key === 'customers') label = 'コンバージョン顧客';
-            else if (key === 'budget') label = '残り予算';
-            else if (key === 'retentionRate') label = '維持率 %';
-            else if (key === 'satisfactionScore') label = '満足度 (1-10)';
-            else if (key === 'activeCustomers') label = 'アクティブ顧客';
-
-            metricsHtml += `<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div></div>`;
-        }
+        const metricsHtml = scenarioMetricsHtml(currentScenarioState, effects);
 
         const feedback = `
             <div class="feedback">
                 <h4>戦略分析</h4>
                 <p>${choice.explanation}</p>
             </div>
-            <h3 style="color: #111827; font-size: 16px; font-weight: 600; margin-top: 24px; margin-bottom: 12px;">更新されたメトリクス</h3>
+            <h3 class="scenario-sub">更新された指標（選択による変化）</h3>
             <div class="metrics-grid">${metricsHtml}</div>
             <button class="button" onclick="nextScenario()" style="margin-top: 20px;">シナリオシリーズを続行</button>
         `;
