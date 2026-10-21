@@ -864,6 +864,41 @@
   .metric-delta.up { color: #047857; background: #d1fae5; }
   .metric-delta.down { color: #b45309; background: #fef3c7; }
 
+
+  /* ---- redesign: socratic & review ---- */
+  .socratic-q { font-size: 17px; font-weight: 600; color: #111827; line-height: 1.8; margin: 0 0 16px 0; }
+  details.hints { padding: 0; }
+  details.hints summary { cursor: pointer; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--accent); list-style: none; }
+  details.hints summary::-webkit-details-marker { display: none; }
+  details.hints summary::before { content: "💡 "; }
+  details.hints ul { margin: 0 0 12px 36px; }
+  details.hints[open] summary { padding-bottom: 4px; }
+  details.hints[open] { padding-bottom: 10px; }
+  .input-meta { text-align: right; font-size: 12px; color: #9ca3af; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .field-error { color: #b45309; background: #fffbeb; border-radius: 10px; padding: 10px 14px; font-size: 13px; margin: 12px 0 0; }
+  .recap-answer { white-space: pre-wrap; }
+  .feedback-guide { border-left-color: #6366f1; background: #eef2ff; }
+  .feedback-guide h4 { color: #4338ca; }
+  .feedback-guide h4::before { content: "💬 "; }
+
+  .review-card { padding: 36px 28px; }
+  .review-word { font-size: 28px; margin: 8px 0 14px; }
+  .review-countdown {
+    width: 84px; height: 84px; margin: 12px auto 20px; border-radius: 9999px; font-size: 32px; color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle, #fff 58%, transparent 60%), conic-gradient(var(--accent) calc(var(--p, 100) * 1%), #e5e7eb 0);
+  }
+  .review-countdown[hidden] { display: none; }
+  .review-card .recall-def { font-size: 15px; padding: 14px 16px; }
+  .review-card .rate-row { flex-direction: column; }
+  .review-card .rate-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: none; width: 100%; }
+  .review-card .rate-btn small { font-size: 11px; font-weight: 500; opacity: 0.8; }
+  .review-card #review-reveal { width: 100%; min-height: 44px; }
+  @media (min-width: 641px) {
+    .review-card .rate-row { flex-direction: row; }
+    .review-card .rate-btn { flex: 1 1 0; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -1883,24 +1918,27 @@
         if (reviewPos >= reviewQueue.length) {
             box.innerHTML = `
                 <div class="result-card">
-                    <h2>おつかれさまでした</h2>
-                    <p>今日の復習は完了です。思い出せた用語は、次はもっと間をあけて出てきます。</p>
-                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                    <h2 class="result-title">おつかれさまでした</h2>
+                    <p><strong>${reviewQueue.length}語を復習しました</strong><br>思い出せた用語は、次はもっと間をあけて出てきます。</p>
+                    <div class="result-actions"><button class="button" onclick="goHome()">ホームに戻る</button></div>
                 </div>`;
             return;
         }
         const c = reviewQueue[reviewPos];
         box.innerHTML = `
-            <div class="progress">${reviewPos + 1} / ${reviewQueue.length}</div>
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">${reviewPos + 1} / ${reviewQueue.length}</span><span class="topic-name">今日の復習</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(reviewPos / reviewQueue.length * 100)}"><span style="width: ${reviewPos / reviewQueue.length * 100}%"></span></div>
+            </div>
             <div class="question-container review-card">
                 <div class="step-kicker">5秒リトリーバル</div>
                 <div class="recall-word review-word">${c.word}</div>
                 <p class="review-hint" id="review-hint">この用語の意味を、頭の中で言ってみましょう</p>
-                <div class="review-countdown" id="review-countdown">5</div>
+                <div class="review-countdown" id="review-countdown" style="--p: 100">5</div>
                 <div class="recall-def" id="review-def" hidden>${c.def}</div>
                 <div class="rate-row" id="review-rate" hidden>
-                    <button class="rate-btn rate-ok" onclick="rateReview(true)">思い出せた</button>
-                    <button class="rate-btn rate-ng" onclick="rateReview(false)">思い出せなかった</button>
+                    <button class="rate-btn rate-ok" onclick="rateReview(true)">思い出せた<small>次は${REVIEW_INTERVALS[Math.min((c.stage || 0) + 1, REVIEW_INTERVALS.length - 1)]}日後</small></button>
+                    <button class="rate-btn rate-ng" onclick="rateReview(false)">思い出せなかった<small>明日もう一度</small></button>
                 </div>
                 <button class="button-ghost" id="review-reveal" onclick="revealReview()">答えを見る</button>
             </div>`;
@@ -1913,6 +1951,7 @@
                 revealReview();
             } else {
                 cd.textContent = left;
+                cd.style.setProperty('--p', left / 5 * 100);
             }
         }, 1000);
     }
@@ -1956,25 +1995,35 @@
                 <div class="result-card">
                     <h2 class="result-title">セッション完了</h2>
                     <p>ソクラテス対話シリーズを完了しました。継続的な練習を通じて戦略的思考を発展させてください。</p>
-                    <button class="button" onclick="goHome()" style="margin-top: 20px;">ホームに戻る</button>
+                    <div class="result-actions"><button class="button" onclick="goHome()">ホームに戻る</button></div>
                 </div>
+                <details class="reread">
+                    <summary>あなたの回答を振り返る</summary>
+                    ${socraticQuestions.map((sq, i) => socraticAnswers[i] ? `
+                        <div class="predict-recap"><span class="point-label">問 ${i + 1}</span><p>${escapeHtml(sq.question)}</p><p class="recap-answer">${escapeHtml(socraticAnswers[i])}</p></div>` : '').join('')}
+                </details>
             `;
             return;
         }
 
         const q = socraticQuestions[index];
         let html = `
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">問 ${index + 1} / ${socraticQuestions.length}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(index / socraticQuestions.length * 100)}"><span style="width: ${index / socraticQuestions.length * 100}%"></span></div>
+            </div>
             <div class="question-container">
-                <h3>問 ${index + 1} / ${socraticQuestions.length}</h3>
-                <p>${q.question}</p>
-                <div class="hints">
-                    <strong>考えるヒント:</strong>
+                <div class="step-kicker">THINK　自分の言葉で考える</div>
+                <p class="socratic-q">${q.question}</p>
+                <details class="hints">
+                    <summary>考えるヒントを見る</summary>
                     <ul>
                         ${q.hints.map(h => `<li>${h}</li>`).join('')}
                     </ul>
-                </div>
+                </details>
                 <div class="input-area">
-                    <textarea id="socratic-answer" placeholder="あなたの分析を共有してください...">${escapeHtml(socraticAnswers[index] || '')}</textarea>
+                    <textarea id="socratic-answer" placeholder="あなたの分析を共有してください..." oninput="document.getElementById('socratic-count').textContent = this.value.length + '文字'">${escapeHtml(socraticAnswers[index] || '')}</textarea>
+                    <div class="input-meta"><span id="socratic-count">${(socraticAnswers[index] || '').length}文字</span></div>
                 </div>
                 <button class="button" onclick="submitSocraticAnswer(${index})">回答を送信</button>
                 <div id="socratic-feedback"></div>
@@ -1986,17 +2035,20 @@
     function submitSocraticAnswer(index) {
         const answer = document.getElementById('socratic-answer').value;
         if (!answer.trim()) {
-            alert('回答を入力してください');
+            document.getElementById('socratic-feedback').innerHTML = '<p class="field-error" role="alert">回答を入力してから送信してください（短くてもかまいません）。</p>';
+            document.getElementById('socratic-answer').focus();
             return;
         }
         socraticAnswers[index] = answer;
 
+        const isLast = index + 1 >= socraticQuestions.length;
         const feedback = `
-            <div class="feedback">
-                <h4>フィードバック</h4>
+            <div class="predict-recap"><span class="point-label">あなたの回答</span><p class="recap-answer">${escapeHtml(answer)}</p></div>
+            <div class="feedback feedback-guide">
+                <h4>ガイドからの視点</h4>
                 <p>${socraticResponses[index]}</p>
             </div>
-            <button class="button" onclick="displaySocraticQuestion(${index + 1})" style="margin-top: 20px;">次の問題</button>
+            <button class="button" onclick="displaySocraticQuestion(${index + 1})" style="margin-top: 20px;">${isLast ? '完了する' : '次の問題'}</button>
         `;
         document.getElementById('socratic-feedback').innerHTML = feedback;
     }
