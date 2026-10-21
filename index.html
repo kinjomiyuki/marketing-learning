@@ -761,9 +761,79 @@
     .stat { padding: 12px 14px; }
   }
 
-  /* step bar: completed steps get a check (clearer progress) */
-  .step-bar li.done::before { content: "✓ "; }
-  @media (max-width: 640px) { .step-bar li.done::before { content: "✓"; } }
+
+
+  /* ---- redesign: basics course ---- */
+  .topic-head { margin-bottom: 20px; }
+  .topic-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
+  .topic-count { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; }
+  .topic-name { font-size: 15px; font-weight: 600; color: #111827; }
+  .topic-bar { height: 6px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; }
+  .topic-bar span { display: block; height: 100%; background: linear-gradient(90deg, #34d399, #059669); border-radius: 9999px; transition: width .4s ease; }
+
+  /* stepper: numbered circles joined by a line, completed steps get a check */
+  .step-bar { gap: 0; margin-bottom: 24px; }
+  .step-bar li {
+    position: relative; padding: 34px 2px 0; border-top: none;
+    font-size: 12px; line-height: 1.3;
+  }
+  .step-bar li::before {
+    content: counter(step); position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 26px; height: 26px; border-radius: 9999px; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; border: 2px solid #e5e7eb; color: #9ca3af; font-size: 12px; font-weight: 700;
+  }
+  .step-bar li::after {
+    content: ""; position: absolute; top: 12px; left: calc(-50% + 14px); right: calc(50% + 14px);
+    height: 2px; background: #e5e7eb;
+  }
+  .step-bar li:first-child::after { display: none; }
+  .step-bar li.done::before { content: "✓"; background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step-bar li.done::after, .step-bar li.current::after { background: var(--accent); }
+  .step-bar li.current::before { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18); }
+  .step-bar li.done, .step-bar li.current { color: #047857; }
+  .step-kicker {
+    display: inline-block; background: var(--accent-soft); color: var(--accent-dark);
+    border-radius: 9999px; padding: 3px 12px; margin-bottom: 12px;
+  }
+
+  /* intro: the method as a vertical timeline */
+  .method-intro { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #a7f3d0; }
+  .method-steps { list-style: none; margin: 12px 0 0; padding: 0; counter-reset: ms; }
+  .method-steps li { position: relative; padding: 0 0 18px 44px; counter-increment: ms; }
+  .method-steps li:last-child { padding-bottom: 0; }
+  .method-steps li::before {
+    content: counter(ms); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 9999px;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .method-steps li:not(:last-child)::after {
+    content: ""; position: absolute; left: 13px; top: 32px; bottom: 4px; width: 2px; background: #a7f3d0;
+  }
+
+  /* recall cards: flashcard feel */
+  .recall-card { border-radius: 16px; padding: 18px 20px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); }
+  .recall-word { font-size: 18px; }
+  .recall-card .recall-reveal { width: 100%; min-height: 44px; }
+
+  /* quiz: show right / wrong on the options */
+  .quiz-option.is-correct, .quiz-option.is-correct:has(input:checked) { background: #f0fdf4; border-color: var(--accent); color: #065f46; font-weight: 600; }
+  .quiz-option.is-wrong, .quiz-option.is-wrong:has(input:checked) { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+  .feedback-ng { background: #fffbeb; border-left-color: #f59e0b; }
+  .feedback-ng h4 { color: #b45309; }
+
+  /* result */
+  .result-card h2 {
+    font-size: 48px; line-height: 1.1; font-variant-numeric: tabular-nums;
+    background: linear-gradient(135deg, #10b981, #047857); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .point-block { border-radius: 0 16px 16px 0; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); }
+
+  @media (max-width: 640px) {
+    .step-bar li { font-size: 10px; padding: 34px 0 0; }
+    .step-bar li::before { display: flex; font-size: 12px; }
+    #basics-content > .button, #basics-feedback .button { width: 100%; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
@@ -1356,7 +1426,10 @@
     function basicsHeader(index, step) {
         const mod = basicsModules[index];
         return `
-            <div class="progress">トピック ${index + 1} / ${basicsModules.length}：${mod.title}</div>
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">トピック ${index + 1} / ${basicsModules.length}</span><span class="topic-name">${mod.title}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round((index + step / BASICS_STEPS.length) / basicsModules.length * 100)}"><span style="width: ${(index + step / BASICS_STEPS.length) / basicsModules.length * 100}%"></span></div>
+            </div>
             <ol class="step-bar">
                 ${BASICS_STEPS.map((s, i) => `<li class="${i < step ? 'done' : i === step ? 'current' : ''}">${s}</li>`).join('')}
             </ol>
@@ -1663,10 +1736,14 @@
         basicsAnswers[index] = isCorrect; // 戻って答え直しても二重に加点しない
         basicsScore = Object.values(basicsAnswers).filter(Boolean).length;
         document.querySelectorAll('input[name="basics-quiz"]').forEach(el => { el.disabled = true; });
+        document.querySelectorAll('.quiz-option').forEach((el, i) => {
+            if (i === q.correct) el.classList.add('is-correct');
+            else if (i === selected) el.classList.add('is-wrong');
+        });
 
         const isLast = index + 1 >= basicsModules.length;
         document.getElementById('basics-feedback').innerHTML = `
-            <div class="feedback">
+            <div class="feedback ${isCorrect ? '' : 'feedback-ng'}">
                 <h4>${isCorrect ? '✓ 正解' : '✗ 不正解'}</h4>
                 <p><strong>解説：</strong> ${q.explanation}</p>
             </div>
