@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marketing Learn</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   body {
@@ -954,19 +954,19 @@
   :root {
     --paper: #fbf8f1;
     --cream: #f4efe4;
-    --serif: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+    --serif: 'Inter', 'Noto Sans JP', sans-serif;
   }
   body { background: var(--cream); color: #2b2a26; }
   header { background: rgba(244, 239, 228, 0.88); border-bottom-color: #e3dccd; }
   .brand-icon { background: linear-gradient(135deg, #6f9e93, #3b645a); box-shadow: none; }
   .avatar { background: #dde9e4; color: #3b645a; }
 
-  /* serif headings */
+  /* headings: gothic (sans) */
   .page-head h1, .section-title, .hero-title, .predict-title, .result-card h2, .topic-name, .socratic-q,
   .recall-word, .stat-num, .chat-title strong, .card-mini .card-title, .method-intro h3 {
     font-family: var(--serif);
   }
-  .page-head h1 { font-size: clamp(26px, 5.5vw, 36px); letter-spacing: 0.02em; font-weight: 700; }
+  .page-head h1 { font-size: clamp(26px, 5.5vw, 34px); letter-spacing: 0; font-weight: 700; }
   .page-head p { color: #7a756a; }
 
   /* paper surfaces */
@@ -994,19 +994,20 @@
   /* hero: illustrated card */
   .card-hero {
     position: relative; overflow: hidden; color: #2c4a43;
-    background: #e4ece7; border: 1px solid #c9dcd5; box-shadow: none;
+    background: #efe9db; border: 1px solid #e3dccd; box-shadow: none;
   }
   .card-hero:hover { border: 1px solid #a9c8bf; box-shadow: 0 10px 28px rgba(44, 74, 67, 0.12); }
+  .nw { display: inline-block; }
   .hero-kicker { color: #4a7c70; }
   .hero-desc { color: #46433c; }
   .hero-steps span { background: rgba(74, 124, 112, 0.14); color: #34564e; }
   .hero-btn { background: #4a7c70; color: #fff; }
   .hero-time { color: #5c5850; }
-  .hero-art { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: min(260px, 36%); height: auto; }
-  .card-hero > span { max-width: 58%; }
+  .hero-art { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: min(300px, 42%); height: auto; }
+  .card-hero > span { max-width: 54%; }
   .card-hero > .hero-cta { max-width: none; }
   @media (max-width: 640px) {
-    .hero-art { position: static; transform: none; width: 100%; max-width: 220px; margin: 0 auto 4px; }
+    .hero-art { position: static; transform: none; width: 100%; max-width: 260px; margin: 0 auto 4px; }
     .card-hero > span { max-width: none; }
   }
 
@@ -1016,6 +1017,22 @@
   .chat-messages { background: #f4efe4; }
   .chat-msg.user { background: #4a7c70; }
   .chat-msg.bot::before { background-color: #4a7c70; }
+
+
+  /* ---- illustrations (isometric, like the reference) ---- */
+  .result-card::before, .method-intro::before {
+    content: ""; display: block; width: 200px; height: 162px; margin: 0 auto 12px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 210 170'%3E%3Cdefs%3E%3Cpattern id='rd' width='5' height='5' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='2.5' cy='2.5' r='1.1' fill='%231d1d1b' opacity='.55'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='14.0,124.0 80.0,86.0 204.0,140.0 130.0,172.0 48.0,150.0' fill='%23f09580' stroke='none' stroke-linejoin='round'/%3E%3Cpolygon points='14.0,124.0 80.0,86.0 204.0,140.0 130.0,172.0 48.0,150.0' fill='url(%23rd)' stroke='none'/%3E%3Cpolygon points='30.0,85.0 150.0,145.0 150.0,137.0 30.0,77.0' fill='%23fbf8f1' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='150.0,145.0 200.0,120.0 200.0,112.0 150.0,137.0' fill='%23ece5d6' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='80.0,52.0 200.0,112.0 150.0,137.0 30.0,77.0' fill='%23fbf8f1' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='54.0,67.0 70.0,75.0 70.0,53.0 54.0,45.0' fill='%236aa6a2' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='70.0,75.0 92.0,64.0 92.0,42.0 70.0,53.0' fill='%234f8884' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='76.0,34.0 92.0,42.0 70.0,53.0 54.0,45.0' fill='%2386bdb9' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='88.0,84.0 104.0,92.0 104.0,52.0 88.0,44.0' fill='%23fbf8f1' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='104.0,92.0 126.0,81.0 126.0,41.0 104.0,52.0' fill='%23ece5d6' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='110.0,33.0 126.0,41.0 104.0,52.0 88.0,44.0' fill='%23fbf8f1' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='122.0,101.0 138.0,109.0 138.0,49.0 122.0,41.0' fill='%23e07c66' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='138.0,109.0 160.0,98.0 160.0,38.0 138.0,49.0' fill='%23c96a55' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpolygon points='144.0,30.0 160.0,38.0 138.0,49.0 122.0,41.0' fill='%23f09580' stroke='%231d1d1b' stroke-width='2.2' stroke-linejoin='round' /%3E%3Cpath d='M30 78 L84 50 L112 60 L172 22' fill='none' stroke='%231d1d1b' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpolygon points='176,19 162,20 170,32' fill='%231d1d1b'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .method-intro::before { width: 140px; height: 113px; margin-bottom: 8px; }
+  .method-intro { text-align: left; }
+  .method-intro::before { margin-left: 0; }
+  @media (max-width: 640px) {
+    .learning-area .button { width: 100%; padding: 15px 24px; }
+    .result-actions .button-ghost { width: 100%; min-height: 48px; }
+    .card-hero { align-items: center; text-align: center; }
+    .card-hero .hero-steps, .card-hero .hero-cta { justify-content: center; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
@@ -1053,36 +1070,9 @@
       <div id="home-stats"></div>
 
       <button class="card card-hero" onclick="startBasics()">
-        <svg class="hero-art" viewBox="0 0 260 220" aria-hidden="true" focusable="false">
-          <ellipse cx="130" cy="197" rx="108" ry="10" fill="#c9dcd5" opacity=".8"/>
-          <g stroke="#2c4a43" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
-            <rect x="50" y="86" width="160" height="104" rx="6" fill="#fbf8f1"/>
-            <path d="M42 88 L56 50 H204 L218 88 Z" fill="#4a7c70"/>
-            <path d="M82 50 L78 88 M108 50 L106 88 M134 50 V88 M160 50 L162 88 M186 50 L190 88" stroke="#fbf8f1" stroke-width="9" opacity=".5"/>
-            <path d="M42 88 q10 14 20 0 q10 14 20 0 q10 14 20 0 q10 14 20 0 q10 14 20 0 q10 14 20 0 q10 14 20 0 q10 14 16 0" fill="#4a7c70"/>
-            <rect x="94" y="26" width="72" height="24" rx="6" fill="#fbf8f1"/>
-            <rect x="112" y="124" width="36" height="66" rx="4" fill="#d9a95a"/>
-            <circle cx="140" cy="158" r="2.5" fill="#2c4a43"/>
-            <rect x="62" y="108" width="38" height="40" rx="4" fill="#ebf2ef"/>
-            <rect x="160" y="108" width="38" height="40" rx="4" fill="#ebf2ef"/>
-            <ellipse cx="81" cy="138" rx="13" ry="7" fill="#d9a95a"/>
-            <ellipse cx="179" cy="138" rx="13" ry="7" fill="#d9a95a"/>
-            <path d="M74 136 l3 -3 M81 136 l3 -3 M88 136 l3 -3 M172 136 l3 -3 M179 136 l3 -3 M186 136 l3 -3" stroke-width="1.5"/>
-            <path d="M28 196 V118 M232 196 V118" fill="none"/>
-            <g fill="#d9a95a">
-              <ellipse cx="22" cy="124" rx="4" ry="8" transform="rotate(-28 22 124)"/><ellipse cx="34" cy="124" rx="4" ry="8" transform="rotate(28 34 124)"/>
-              <ellipse cx="22" cy="140" rx="4" ry="8" transform="rotate(-28 22 140)"/><ellipse cx="34" cy="140" rx="4" ry="8" transform="rotate(28 34 140)"/>
-              <ellipse cx="22" cy="156" rx="4" ry="8" transform="rotate(-28 22 156)"/><ellipse cx="34" cy="156" rx="4" ry="8" transform="rotate(28 34 156)"/>
-              <ellipse cx="226" cy="124" rx="4" ry="8" transform="rotate(-28 226 124)"/><ellipse cx="238" cy="124" rx="4" ry="8" transform="rotate(28 238 124)"/>
-              <ellipse cx="226" cy="140" rx="4" ry="8" transform="rotate(-28 226 140)"/><ellipse cx="238" cy="140" rx="4" ry="8" transform="rotate(28 238 140)"/>
-              <ellipse cx="226" cy="156" rx="4" ry="8" transform="rotate(-28 226 156)"/><ellipse cx="238" cy="156" rx="4" ry="8" transform="rotate(28 238 156)"/>
-            </g>
-          </g>
-          <text x="130" y="43" text-anchor="middle" font-family="'Noto Serif JP', serif" font-size="14" font-weight="700" fill="#2c4a43">こむぎ堂</text>
-          <path d="M206 24 v12 M200 30 h12 M44 36 v8 M40 40 h8" stroke="#c9923f" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <svg class="hero-art" viewBox="0 0 300 260" aria-hidden="true" focusable="false"><defs><pattern id="dots" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1.1" fill="#1d1d1b" opacity=".55"/></pattern></defs><polygon points="36.0,176.0 150.0,114.0 268.0,172.0 168.0,240.0 70.0,214.0" fill="#f09580" stroke="none" stroke-linejoin="round"/><polygon points="36.0,176.0 150.0,114.0 268.0,172.0 168.0,240.0 70.0,214.0" fill="url(#dots)" stroke="none"/><polygon points="60.0,157.0 180.0,217.0 180.0,208.0 60.0,148.0" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="180.0,217.0 270.0,172.0 270.0,163.0 180.0,208.0" fill="#ece5d6" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="150.0,103.0 270.0,163.0 180.0,208.0 60.0,148.0" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="103.0,151.5 173.0,186.5 173.0,136.5 103.0,101.5" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="173.0,186.5 227.0,159.5 227.0,109.5 173.0,136.5" fill="#ece5d6" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="157.0,74.5 227.0,109.5 173.0,136.5 103.0,101.5" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><path d="M179.8 179.1 l0 -9" stroke="#1d1d1b" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M186.5 175.8 l0 -9" stroke="#1d1d1b" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M193.2 172.4 l0 -9" stroke="#1d1d1b" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M200.0 169.0 l0 -9" stroke="#1d1d1b" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M206.8 165.6 l0 -9" stroke="#1d1d1b" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M213.5 162.2 l0 -9" stroke="#1d1d1b" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M220.2 158.9 l0 -9" stroke="#1d1d1b" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><polygon points="117.0,158.5 135.0,167.5 135.0,133.5 117.0,124.5" fill="#86bdb9" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><circle cx="131.0" cy="149.5" r="1.8" fill="#1d1d1b"/><polygon points="185.0,164.5 213.0,150.5 213.0,126.5 185.0,140.5" fill="#fff" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="185.0,164.5 213.0,150.5 213.0,126.5 185.0,140.5" fill="url(#dots)" opacity=".55"/><ellipse cx="199.0" cy="154.5" rx="8" ry="4" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><polygon points="103.0,101.5 117.0,108.5 117.0,120.5 103.0,113.5" fill="#f09580" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="117.0,108.5 131.0,115.5 131.0,127.5 117.0,120.5" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="131.0,115.5 145.0,122.5 145.0,134.5 131.0,127.5" fill="#f09580" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="145.0,122.5 159.0,129.5 159.0,141.5 145.0,134.5" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="159.0,129.5 173.0,136.5 173.0,148.5 159.0,141.5" fill="#f09580" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="173.0,136.5 182.0,132.0 182.0,144.0 173.0,148.5" fill="#f09580" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="182.0,132.0 191.0,127.5 191.0,139.5 182.0,144.0" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="191.0,127.5 200.0,123.0 200.0,135.0 191.0,139.5" fill="#f09580" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="200.0,123.0 209.0,118.5 209.0,130.5 200.0,135.0" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="209.0,118.5 218.0,114.0 218.0,126.0 209.0,130.5" fill="#f09580" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="218.0,114.0 227.0,109.5 227.0,121.5 218.0,126.0" fill="#fbf8f1" stroke="#1d1d1b" stroke-width="1.8" stroke-linejoin="round" /><polygon points="95.0,101.5 173.0,140.5 173.0,133.5 95.0,94.5" fill="#6aa6a2" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="173.0,140.5 235.0,109.5 235.0,102.5 173.0,133.5" fill="#4f8884" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><polygon points="157.0,63.5 235.0,102.5 173.0,133.5 95.0,94.5" fill="#86bdb9" stroke="#1d1d1b" stroke-width="2.2" stroke-linejoin="round" /><path d="M157.0 56.5 v-24" stroke="#1d1d1b" stroke-width="2.2" stroke-linecap="round"/><polygon points="157.0,32.5 179.0,40.5 157.0,48.5" fill="#f09580" stroke="#1d1d1b" stroke-width="2" stroke-linejoin="round"/><path d="M78 172 v-42" stroke="#1d1d1b" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="73" cy="156" rx="3.6" ry="7" transform="rotate(-28 73 156)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="83" cy="156" rx="3.6" ry="7" transform="rotate(28 83 156)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="73" cy="148" rx="3.6" ry="7" transform="rotate(-28 73 148)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="83" cy="148" rx="3.6" ry="7" transform="rotate(28 83 148)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="73" cy="140" rx="3.6" ry="7" transform="rotate(-28 73 140)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="83" cy="140" rx="3.6" ry="7" transform="rotate(28 83 140)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="73" cy="132" rx="3.6" ry="7" transform="rotate(-28 73 132)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="83" cy="132" rx="3.6" ry="7" transform="rotate(28 83 132)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><path d="M91 181 v-42" stroke="#1d1d1b" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="86" cy="165" rx="3.6" ry="7" transform="rotate(-28 86 165)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="96" cy="165" rx="3.6" ry="7" transform="rotate(28 96 165)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="86" cy="157" rx="3.6" ry="7" transform="rotate(-28 86 157)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="96" cy="157" rx="3.6" ry="7" transform="rotate(28 96 157)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="86" cy="149" rx="3.6" ry="7" transform="rotate(-28 86 149)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="96" cy="149" rx="3.6" ry="7" transform="rotate(28 96 149)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="86" cy="141" rx="3.6" ry="7" transform="rotate(-28 86 141)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="96" cy="141" rx="3.6" ry="7" transform="rotate(28 96 141)" fill="#e9b765" stroke="#1d1d1b" stroke-width="1.6"/><ellipse cx="196" cy="196" rx="13" ry="6.5" fill="#e9b765" stroke="#1d1d1b" stroke-width="2"/><path d="M190 195 l3 -3 M196 195 l3 -3 M202 195 l3 -3" stroke="#1d1d1b" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="224" cy="184" rx="13" ry="6.5" fill="#e9b765" stroke="#1d1d1b" stroke-width="2"/><path d="M218 183 l3 -3 M224 183 l3 -3 M230 183 l3 -3" stroke="#1d1d1b" stroke-width="1.4" stroke-linecap="round"/></svg>
         <span class="hero-kicker">おすすめ・はじめの一歩</span>
-        <span class="hero-title">マーケティングの基礎を学ぶ</span>
+        <span class="hero-title"><span class="nw">マーケティングの</span><span class="nw">基礎を学ぶ</span></span>
         <span class="hero-desc">パン屋「こむぎ堂」の立て直しストーリーで、STP・4P・CACやLTVが実際にどう使われるかを学びます。「予想→読む→説明→用語を思い出す」の流れで、日をあけた復習まで。</span>
         <span class="hero-steps" aria-hidden="true">
           <span>1 予想</span><span>2 読む</span><span>3 説明</span><span>4 思い出す</span><span>5 クイズ</span>
