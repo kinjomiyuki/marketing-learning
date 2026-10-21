@@ -899,6 +899,56 @@
     .review-card .rate-btn { flex: 1 1 0; }
   }
 
+
+  /* ---- redesign: chat panel ---- */
+  .chat-fab { background: linear-gradient(135deg, #10b981, #047857); }
+  .chat-panel { border: none; border-radius: 24px; box-shadow: 0 16px 48px rgba(6, 78, 59, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.04); }
+  .chat-header { background: linear-gradient(135deg, #059669, #064e3b); padding: 14px 16px; gap: 12px; justify-content: flex-start; }
+  .chat-avatar { width: 36px; height: 36px; flex: 0 0 36px; border-radius: 9999px; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center; }
+  .chat-avatar svg { width: 20px; height: 20px; }
+  .chat-title { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.3; }
+  .chat-title strong { font-size: 15px; }
+  .chat-title small { font-size: 11px; font-weight: 500; opacity: 0.8; }
+  .chat-messages { padding: 16px 16px 16px 12px; scroll-behavior: smooth; }
+  .chat-empty { margin: 8px 0 0 4px; text-align: left; font-size: 13px; color: #4b5563; }
+  .chat-empty p { margin: 0 0 12px; }
+  .chat-suggest { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chat-suggest button {
+    font-family: inherit; font-size: 13px; font-weight: 500; color: var(--accent-dark); background: #fff;
+    border: 1px solid #a7f3d0; border-radius: 9999px; padding: 8px 14px; cursor: pointer; min-height: 36px;
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+  .chat-suggest button:hover { background: var(--accent-soft); border-color: #6ee7b7; }
+
+  .chat-msg { font-size: 14px; line-height: 1.7; position: relative; }
+  .chat-msg.bot { margin-left: 32px; max-width: calc(100% - 44px); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); }
+  .chat-msg.bot::before {
+    content: ""; position: absolute; left: -32px; top: 0; width: 24px; height: 24px; border-radius: 9999px;
+    background: #059669 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 6.04A9 9 0 006 3.75c-1.05 0-2.06.18-3 .51v14.25A9 9 0 016 18c2.3 0 4.4.87 6 2.29m0-14.25a9 9 0 016-2.29c1.05 0 2.06.18 3 .51v14.25A9 9 0 0018 18a9 9 0 00-6 2.29m0-14.25v14.25'/></svg>") center / 14px no-repeat;
+  }
+  .chat-msg.user { background: linear-gradient(135deg, #10b981, #059669); }
+  /* typing indicator instead of the "考え中..." text */
+  .chat-msg.bot.pending { font-size: 0; font-style: normal; min-height: 38px; min-width: 56px; display: flex; align-items: center; gap: 4px; padding: 0 16px; }
+  .chat-msg.bot.pending::after {
+    content: ""; width: 6px; height: 6px; border-radius: 9999px; background: #9ca3af; flex: none;
+    box-shadow: 10px 0 0 #9ca3af, 20px 0 0 #9ca3af; margin-right: 20px;
+    animation: chatDots 1.2s ease-in-out infinite;
+  }
+  @keyframes chatDots { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+  .chat-input-row { align-items: flex-end; padding: 12px 12px 4px; }
+  .chat-input-row textarea { border-radius: 14px; padding: 10px 14px; line-height: 1.5; max-height: 96px; }
+  .chat-input-row textarea:focus { box-shadow: var(--ring); }
+  .chat-send { width: 40px; height: 40px; padding: 0; border-radius: 9999px; display: flex; align-items: center; justify-content: center; }
+  .chat-send svg { width: 18px; height: 18px; }
+  .chat-hint { flex-shrink: 0; background: #fff; text-align: center; font-size: 11px; color: #9ca3af; padding: 0 12px 10px; }
+  @media (max-width: 640px) {
+    .chat-hint { display: none; }
+    .chat-input-row { padding-bottom: 12px; }
+    .chat-panel { right: 8px; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 68px); width: calc(100vw - 16px); max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .chat-msg.bot.pending::after { animation: none; } }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -1045,18 +1095,32 @@
   </svg>
 </button>
 
-<div class="chat-panel" id="chatPanel">
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="質問チャット">
   <div class="chat-header">
-    <span>質問チャット</span>
+    <span class="chat-avatar" aria-hidden="true">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path></svg>
+    </span>
+    <span class="chat-title"><strong>質問チャット</strong><small>マーケティングのこと、気軽にどうぞ</small></span>
     <button class="chat-close" onclick="toggleChat()" aria-label="閉じる">×</button>
   </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="chat-empty">マーケティングについて、いつでも気軽に質問してください。</div>
+  <div class="chat-messages" id="chatMessages" aria-live="polite">
+    <div class="chat-empty">
+      <p>わからない用語や、学習で気になったことを聞いてみましょう。</p>
+      <div class="chat-suggest">
+        <button onclick="askSuggestion('STPとは？')">STPとは？</button>
+        <button onclick="askSuggestion('4Pって何？')">4Pって何？</button>
+        <button onclick="askSuggestion('LTVとCACの違いは？')">LTVとCACの違いは？</button>
+        <button onclick="askSuggestion('リテンションとは？')">リテンションとは？</button>
+      </div>
+    </div>
   </div>
   <div class="chat-input-row">
-    <textarea id="chatInput" rows="1" placeholder="質問を入力..." onkeydown="handleChatKeydown(event)"></textarea>
-    <button class="chat-send" id="chatSendBtn" onclick="sendChatMessage()">送信</button>
+    <textarea id="chatInput" rows="1" placeholder="質問を入力..." aria-label="質問を入力" onkeydown="handleChatKeydown(event)" oninput="autosizeChat(this)"></textarea>
+    <button class="chat-send" id="chatSendBtn" onclick="sendChatMessage()" aria-label="送信">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.27 3.13a.75.75 0 011.03-.9l16.5 8.25a.75.75 0 010 1.34L4.3 19.97a.75.75 0 01-1.03-.9L6 12zm0 0h7.5"></path></svg>
+    </button>
   </div>
+  <div class="chat-hint">Enterで送信 ／ Shift+Enterで改行</div>
 </div>
 
 <script>
@@ -2279,6 +2343,20 @@
         }
     }
 
+    function autosizeChat(el) {
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 96) + 'px';
+    }
+
+    function askSuggestion(text) {
+        document.getElementById('chatInput').value = text;
+        sendChatMessage();
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.getElementById('chatPanel').classList.contains('open')) toggleChat();
+    });
+
     function handleChatKeydown(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -2305,6 +2383,7 @@
         const sendBtn = document.getElementById('chatSendBtn');
 
         input.value = '';
+        input.style.height = '';
         appendChatMessage('user', text);
         chatHistory.push({ role: 'user', content: text });
         sendBtn.disabled = true;
