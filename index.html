@@ -1069,6 +1069,24 @@
   .word-list span { color: #5c5850; }
   @media (max-width: 640px) { .start-choices { grid-template-columns: 1fr; } }
 
+
+  .start-card:nth-child(n+3) { background: var(--paper); }
+  .start-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .gloss-search {
+    width: 100%; padding: 12px 16px; font-family: inherit; font-size: 16px; color: #2b2a26;
+    background: var(--paper); border: 1px solid #e3dccd; border-radius: 9999px;
+  }
+  .gloss-search:focus { outline: none; box-shadow: var(--ring); background: #fff; }
+  .gloss-item { border-bottom: 1px solid #e3dccd; }
+  .gloss-item[hidden] { display: none; }
+  .gloss-item summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; cursor: pointer; padding: 14px 4px; font-size: 15px; font-weight: 600; color: #2b2a26; list-style: none; }
+  .gloss-item summary::-webkit-details-marker { display: none; }
+  .gloss-item summary::after { content: "＋"; color: #a39d90; font-weight: 400; }
+  .gloss-item[open] summary::after { content: "－"; }
+  .gloss-item summary > span:first-child { flex: 1; }
+  .gloss-tag { font-size: 11px; font-weight: 600; color: #4a7c70; background: #ebf2ef; border-radius: 9999px; padding: 2px 10px; }
+  .gloss-item p { margin: 0 4px 14px; font-size: 14px; line-height: 1.8; color: #5c5850; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -1702,19 +1720,37 @@
     function renderBasicsIntro() {
         basicsNav('intro', renderBasicsIntro);
         renderBasics(`
-            <h3 class="choose-title choose-first">どちらから始めますか？</h3>
+            <h3 class="choose-title choose-first">どこから始めますか？</h3>
             <div class="start-choices">
                 <button class="start-card" onclick="startLaws()">
                     <span class="start-kicker">おすすめ・はじめの一歩</span>
                     <span class="start-title">法則から学ぶ</span>
                     <span class="start-desc">パレートの法則など${basicsLaws.length}つの法則を知り、そこに出てくる用語（${basicsLaws.reduce((n, l) => n + l.words.length, 0)}語）を一緒に覚えます。</span>
-                    <span class="start-meta">約10分</span>
+                    <span class="start-meta">約${basicsLaws.length * 2}分</span>
                 </button>
                 <button class="start-card" onclick="displayBasicsContent(0)">
                     <span class="start-kicker">STORY</span>
                     <span class="start-title">ストーリーから学ぶ</span>
                     <span class="start-desc">パン屋「こむぎ堂」の立て直しを追いながら、STP・4P・CAC・LTV を実際の場面で学びます。</span>
                     <span class="start-meta">約20分</span>
+                </button>
+                <button class="start-card" onclick="startCases()">
+                    <span class="start-kicker">CASE</span>
+                    <span class="start-title">事例から学ぶ</span>
+                    <span class="start-desc">スターバックスやDropboxなど${basicsCases.length}つの実在の事例から、打ち手とそこに出てくる用語を学びます。</span>
+                    <span class="start-meta">約${basicsCases.length * 2}分</span>
+                </button>
+                <button class="start-card" onclick="renderGlossary()">
+                    <span class="start-kicker">GLOSSARY</span>
+                    <span class="start-title">用語集から学ぶ</span>
+                    <span class="start-desc">用語を検索して読み、ランダムな5語で思い出す練習ができます。</span>
+                    <span class="start-meta">好きなときに</span>
+                </button>
+                <button class="start-card" onclick="startQuiz()">
+                    <span class="start-kicker">QUIZ</span>
+                    <span class="start-title">クイズから学ぶ</span>
+                    <span class="start-desc">まず腕試しをして、わからなかったところから学びます。</span>
+                    <span class="start-meta">約10分</span>
                 </button>
             </div>
             <h3 class="choose-title">学び方のコツ</h3>
@@ -1810,86 +1846,233 @@
                 { word: "UGC", def: "ユーザー生成コンテンツ。顧客が自分で投稿する写真・レビューなど" },
                 { word: "バンドワゴン効果", def: "流行しているものに乗りたくなり、さらに選ばれやすくなる現象" }
             ]
+        },
+        {
+            name: "希少性の原理",
+            summary: "手に入りにくいもの、数が限られているものほど、価値が高く見える心理。",
+            example: "「1日20個限定」の焼きたてパンは、いつでも買えるパンより、急いで買いたくなる。",
+            note: "「限定」が実は嘘だとわかると、ブランドへの信頼を大きく損ないます。",
+            words: [
+                { word: "限定販売", def: "数量や期間を決めて売ること" },
+                { word: "緊急性", def: "「いま買わないと損をする」と感じさせる状態" },
+                { word: "FOMO", def: "Fear Of Missing Out の略。自分だけ取り残されることへの不安" }
+            ]
+        },
+        {
+            name: "ハロー効果",
+            summary: "ひとつの目立つ特徴（有名・見た目・肩書きなど）に引きずられて、ほかの部分まで高く（または低く）評価してしまう心理。",
+            example: "有名な人が使っている、というだけで、その商品全体の品質が高そうに見える。",
+            note: "実際の品質と結びつかない評価は、期待外れになったときの反動も大きくなります。",
+            words: [
+                { word: "第一印象", def: "出会って短い時間で決まる、相手に対する印象" },
+                { word: "インフルエンサー", def: "SNSなどで、多くの人の考えや行動に影響を与える人" },
+                { word: "ブランドイメージ", def: "顧客がブランドに対して持っている印象の全体" }
+            ]
         }
     ];
 
-    function lawHeader(l, step) {
-        const total = basicsLaws.length;
-        const pct = (l + step / 2) / total * 100;
+    // ---- 事例から学ぶ：実在のブランドの打ち手 → そこに出てくる単語 ----
+    const basicsCases = [
+        {
+            name: "スターバックス「サードプレイス」",
+            summary: "家でも職場でもない、くつろげる「第三の居場所」を提供する、という立ち位置を打ち出した。コーヒーそのものだけでなく、過ごす時間の価値を売っている。",
+            example: "競合は、ほかのコーヒーショップだけではありません。「ひと息つく場所」というくくりで見ると、競争相手も、選ばれる理由も変わります。",
+            note: "立ち位置は、商品・店舗・接客のすべてが一致して初めて伝わります。",
+            words: [
+                { word: "サードプレイス", def: "家・職場に次ぐ、くつろげる第三の居場所" },
+                { word: "ブランド体験", def: "商品だけでなく、店の雰囲気や接客も含めた、顧客の体験の全体" },
+                { word: "付加価値", def: "商品そのものの機能に加えて、顧客が感じる価値" }
+            ]
+        },
+        {
+            name: "Dropboxの紹介プログラム",
+            summary: "友だちを招待すると、招待した人も、された人も、無料で使える容量が増える仕組み。使っている人自身が、人に勧めたくなる動機をつくった。",
+            example: "広告にお金をかける代わりに、既存のユーザーに広めてもらうことで、新しい顧客を増やしました。",
+            note: "紹介してもらうには、まず使った人が満足していることが前提です。",
+            words: [
+                { word: "紹介プログラム", def: "既存の顧客が新しい顧客を紹介すると、特典がもらえる仕組み" },
+                { word: "バイラルマーケティング", def: "利用者どうしの共有や口コミで、ウイルスのように広がっていく手法" },
+                { word: "CAC", def: "顧客獲得単価。1人の新しい顧客を獲得するためにかかった費用" }
+            ]
+        },
+        {
+            name: "無印良品「これでいい」",
+            summary: "「これがいい」という強い個性ではなく、「これでいい」と納得できる素材・価格・シンプルさを大切にするブランドコンセプトを貫いた。",
+            example: "派手に目立つのではなく、「余計なものがない」という一貫した方針そのものを、ほかとの違いにしています。",
+            note: "コンセプトが商品・店・広告でぶれないことが、ブランドの強さになります。",
+            words: [
+                { word: "ブランドコンセプト", def: "ブランドが何を大切にし、顧客に何を約束するかを表す考え方" },
+                { word: "プライベートブランド", def: "小売店が自社で企画して売る、オリジナルのブランド" },
+                { word: "ブランドの一貫性", def: "商品・店・広告で、同じ世界観や考え方を保つこと" }
+            ]
+        },
+        {
+            name: "Amazonプライム",
+            summary: "会費を払うと、配送の特典や動画の見放題などが使える会員制。会員は、特典を使い続けるうちに、そのお店で買う回数が増えやすくなる。",
+            example: "1回の売上ではなく、顧客が長く使い続けることで得られる利益を大きくする考え方です。",
+            note: "特典の維持にはコストがかかるため、会費と得られる利益のバランスが大事です。",
+            words: [
+                { word: "サブスクリプション", def: "一定期間ごとに料金を払い、サービスを使い続ける課金モデル" },
+                { word: "スイッチングコスト", def: "ほかのサービスに乗り換えるときにかかる、手間や損失" },
+                { word: "LTV", def: "顧客生涯価値。1人の顧客が取引の期間を通じてもたらす利益" }
+            ]
+        }
+    ];
+
+    // 法則・事例で共通の「知る → 単語を思い出す」プレーヤー
+    const UNITS = {
+        law:  { list: () => basicsLaws,  noun: '法則', kicker: 'LAW',  readStep: '法則を知る', exLabel: '身近な例',   next: '次の法則へ' },
+        case: { list: () => basicsCases, noun: '事例', kicker: 'CASE', readStep: '事例を知る', exLabel: '学べること', next: '次の事例へ' }
+    };
+
+    function unitHeader(kind, i, step) {
+        const u = UNITS[kind], list = u.list();
+        const pct = (i + step / 2) / list.length * 100;
         return `
             <div class="topic-head">
-                <div class="topic-meta"><span class="topic-count">法則 ${l + 1} / ${total}</span><span class="topic-name">${basicsLaws[l].name}</span></div>
+                <div class="topic-meta"><span class="topic-count">${u.noun} ${i + 1} / ${list.length}</span><span class="topic-name">${list[i].name}</span></div>
                 <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><span style="width: ${pct}%"></span></div>
             </div>
             <ol class="step-bar">
-                ${['法則を知る', '単語を思い出す'].map((t, i) => `<li class="${i < step ? 'done' : i === step ? 'current' : ''}">${t}</li>`).join('')}
+                ${[u.readStep, '単語を思い出す'].map((t, n) => `<li class="${n < step ? 'done' : n === step ? 'current' : ''}">${t}</li>`).join('')}
             </ol>`;
     }
 
-    function startLaws() {
-        renderLawRead(0);
-    }
+    function startUnits(kind) { renderUnitRead(kind, 0); }
+    function startLaws() { startUnits('law'); }
+    function startCases() { startUnits('case'); }
 
-    // 1) 法則を読む（要約・身近な例・出てくる単語）
-    function renderLawRead(l) {
-        basicsNav(`law-read-${l}`, () => renderLawRead(l));
-        const law = basicsLaws[l];
+    // 1) 知る（要約・例・注意点・出てくる単語）
+    function renderUnitRead(kind, i) {
+        basicsNav(`${kind}-read-${i}`, () => renderUnitRead(kind, i));
+        const u = UNITS[kind], item = u.list()[i];
         renderBasics(`
-            ${lawHeader(l, 0)}
+            ${unitHeader(kind, i, 0)}
             <div class="question-container">
-                <div class="step-kicker">LAW ${l + 1}　法則</div>
-                <p class="law-summary">${law.summary}</p>
-                <div class="point-block"><span class="point-label">身近な例</span><p>${law.example}</p></div>
-                <p class="method-note">${law.note}</p>
+                <div class="step-kicker">${u.kicker} ${i + 1}　${u.noun}</div>
+                <p class="law-summary">${item.summary}</p>
+                <div class="point-block"><span class="point-label">${u.exLabel}</span><p>${item.example}</p></div>
+                <p class="method-note">${item.note}</p>
             </div>
             <div class="basics-block">
-                <h3>この法則に出てくる単語</h3>
+                <h3>${kind === 'law' ? 'この法則' : 'この事例'}に出てくる単語</h3>
                 <ul class="word-list">
-                    ${law.words.map(k => `<li><strong>${k.word}</strong><span>${k.def}</span></li>`).join('')}
+                    ${item.words.map(k => `<li><strong>${k.word}</strong><span>${k.def}</span></li>`).join('')}
                 </ul>
             </div>
-            <button class="button" onclick="renderLawWords(${l})">単語を思い出す</button>
+            <button class="button" onclick="renderUnitWords('${kind}', ${i})">単語を思い出す</button>
         `);
     }
 
     // 2) 単語を思い出す（答えを見る前に頭の中で言う → 評価すると復習カードになる）
-    function renderLawWords(l) {
-        basicsNav(`law-words-${l}`, () => renderLawWords(l));
-        const law = basicsLaws[l];
-        const isLast = l + 1 >= basicsLaws.length;
+    function renderUnitWords(kind, i) {
+        basicsNav(`${kind}-words-${i}`, () => renderUnitWords(kind, i));
+        const u = UNITS[kind], list = u.list(), item = list[i];
+        const isLast = i + 1 >= list.length;
         renderBasics(`
-            ${lawHeader(l, 1)}
+            ${unitHeader(kind, i, 1)}
             <div class="question-container">
                 <div class="step-kicker">RECALL　単語</div>
                 <h3>いま読んだ単語の意味を、答えを見ずに思い出しましょう</h3>
                 <p>頭の中で言えたら答えを見て、思い出せたかどうかを正直に選んでください。選んだ単語は復習カードになり、日をあけて「今日の復習」に出てきます。</p>
-                ${law.words.map((k, i) => recallCardHtml(k, `law-${l}-${i}`, true, 'rateLawWord')).join('')}
+                ${item.words.map((k, j) => recallCardHtml(k, `${kind}-${i}-${j}`, true, 'rateUnitWord')).join('')}
             </div>
-            <button class="button" onclick="${isLast ? 'renderLawsResult()' : `renderLawRead(${l + 1})`}">${isLast ? '結果を見る' : '次の法則へ'}</button>
+            <button class="button" onclick="${isLast ? `renderUnitResult('${kind}')` : `renderUnitRead('${kind}', ${i + 1})`}">${isLast ? '結果を見る' : u.next}</button>
         `);
     }
 
-    function rateLawWord(id, remembered) {
-        const [, l, i] = id.split('-').map(Number);
-        const k = basicsLaws[l].words[i];
+    function rateUnitWord(id, remembered) {
+        const [kind, i, j] = id.split('-');
+        const k = UNITS[kind].list()[Number(i)].words[Number(j)];
         addReviewCard(id, k, remembered);
         const card = document.getElementById(id);
         card.querySelector('.recall-rate').innerHTML = `<span class="rate-result ${remembered ? 'ok' : 'ng'}">${remembered ? '✓ 思い出せた' : 'もう一度読んで覚え直そう'}</span>`;
     }
 
-    function renderLawsResult() {
-        basicsNav('law-result', renderLawsResult);
-        const total = basicsLaws.reduce((n, l) => n + l.words.length, 0);
+    function renderUnitResult(kind) {
+        basicsNav(`${kind}-result`, () => renderUnitResult(kind));
+        const u = UNITS[kind], list = u.list();
+        const total = list.reduce((n, x) => n + x.words.length, 0);
+        const follow = kind === 'law'
+            ? `<button class="button" onclick="startCases()">実在のブランドの事例で確かめる</button>`
+            : `<button class="button" onclick="renderGlossary()">用語集で確認する</button>`;
         renderBasics(`
             <div class="result-card">
-                <h2 class="result-title">${basicsLaws.length}つの法則を学びました</h2>
+                <h2 class="result-title">${list.length}つの${u.noun}を学びました</h2>
                 <p><strong>${total}語</strong>の用語に出会いました。評価した用語は復習カードになります。<br>明日、ホーム画面の「今日の復習」から思い出しましょう。</p>
                 <div class="result-actions">
-                    <button class="button" onclick="displayBasicsContent(0)">こむぎ堂のストーリーへ進む</button>
+                    ${follow}
+                    <button class="button-ghost" onclick="displayBasicsContent(0)">こむぎ堂のストーリーへ進む</button>
                     <button class="button-ghost" onclick="goHome()">ホームに戻る</button>
                 </div>
             </div>
         `);
+    }
+
+    // ---- 用語集：検索して読む／ランダム5語で思い出す ----
+    function glossaryAll() {
+        const seen = new Set(), out = [];
+        const add = (k, group) => { if (!seen.has(k.word)) { seen.add(k.word); out.push({ word: k.word, def: k.def, group }); } };
+        basicsKeywords.forEach(ks => ks.forEach(k => add(k, 'ストーリー講座')));
+        basicsLaws.forEach(l => l.words.forEach(k => add(k, '法則')));
+        basicsCases.forEach(c => c.words.forEach(k => add(k, '事例')));
+        return out;
+    }
+
+    function renderGlossary() {
+        basicsNav('glossary', renderGlossary);
+        const all = glossaryAll();
+        renderBasics(`
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">用語集</span><span class="topic-name">${all.length}語</span></div>
+            </div>
+            <div class="question-container">
+                <div class="input-area"><input type="search" id="gloss-search" class="gloss-search" placeholder="用語を検索..." aria-label="用語を検索" oninput="filterGlossary(this.value)"></div>
+                <div id="gloss-list">
+                    ${all.map(k => `
+                        <details class="gloss-item" data-q="${escapeHtml((k.word + ' ' + k.def).toLowerCase())}">
+                            <summary><span>${k.word}</span><span class="gloss-tag">${k.group}</span></summary>
+                            <p>${k.def}</p>
+                        </details>`).join('')}
+                    <p class="method-note" id="gloss-empty" hidden>見つかりませんでした。</p>
+                </div>
+            </div>
+            <button class="button" onclick="renderGlossaryDrill()">ランダム5語で思い出す</button>
+        `);
+    }
+
+    function filterGlossary(q) {
+        const t = q.trim().toLowerCase();
+        let shown = 0;
+        document.querySelectorAll('#gloss-list .gloss-item').forEach(el => {
+            const hit = !t || el.dataset.q.includes(t);
+            el.hidden = !hit;
+            if (hit) shown++;
+        });
+        document.getElementById('gloss-empty').hidden = shown > 0;
+    }
+
+    let glossDrill = [];
+    function renderGlossaryDrill() {
+        basicsNav('glossary-drill', renderGlossaryDrill);
+        glossDrill = glossaryAll().sort(() => Math.random() - 0.5).slice(0, 5);
+        renderBasics(`
+            <div class="topic-head"><div class="topic-meta"><span class="topic-count">用語集</span><span class="topic-name">ランダム5語</span></div></div>
+            <div class="question-container">
+                <div class="step-kicker">RECALL　単語</div>
+                <h3>意味を、答えを見ずに思い出しましょう</h3>
+                ${glossDrill.map((k, i) => recallCardHtml(k, `gl-${i}`, true, 'rateGlossWord')).join('')}
+            </div>
+            <button class="button" onclick="renderGlossaryDrill()">別の5語に挑戦</button>
+            <button class="button-ghost" onclick="renderGlossary()" style="margin-top: 10px;">用語集に戻る</button>
+        `);
+    }
+
+    function rateGlossWord(id, remembered) {
+        const k = glossDrill[Number(id.split('-')[1])];
+        addReviewCard('g:' + k.word, k, remembered);
+        const card = document.getElementById(id);
+        card.querySelector('.recall-rate').innerHTML = `<span class="rate-result ${remembered ? 'ok' : 'ng'}">${remembered ? '✓ 思い出せた' : 'もう一度読んで覚え直そう'}</span>`;
     }
 
     // トピックの入口。2つ目以降は、まず前回の内容を思い出してから進む
