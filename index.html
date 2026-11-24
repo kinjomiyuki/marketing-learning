@@ -1045,6 +1045,30 @@
     .card-mini .card-art svg { height: 80px; }
   }
 
+
+  /* ---- first step: choose how to start / laws ---- */
+  .choose-title { font-size: 17px; font-weight: 700; margin: 28px 0 12px; }
+  .choose-first { margin-top: 4px; }
+  .start-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
+  .start-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: left;
+    background: var(--paper); border: 1px solid #e3dccd; border-radius: 20px; padding: 20px;
+    font-family: inherit; cursor: pointer; transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .start-card:first-child { border-color: #a9c8bf; background: #f4f8f6; }
+  .start-card:hover { border-color: #a9c8bf; box-shadow: 0 8px 24px rgba(44, 74, 67, 0.1); transform: translateY(-2px); }
+  .start-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #4a7c70; }
+  .start-title { font-size: 18px; font-weight: 700; color: #2b2a26; }
+  .start-desc { font-size: 13px; line-height: 1.7; color: #5c5850; flex: 1; }
+  .start-meta { font-size: 12px; color: #7a756a; background: #efe9dc; border-radius: 9999px; padding: 2px 10px; margin-top: 4px; }
+  .law-summary { font-size: 17px; font-weight: 600; line-height: 1.8; color: #2b2a26; margin: 0 0 16px 0 !important; }
+  .word-list { list-style: none; margin: 8px 0 0; padding: 0; }
+  .word-list li { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; font-size: 14px; line-height: 1.7; }
+  .word-list li + li { border-top: 1px solid #e3dccd; }
+  .word-list strong { color: #3b645a; }
+  .word-list span { color: #5c5850; }
+  @media (max-width: 640px) { .start-choices { grid-template-columns: 1fr; } }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -1678,6 +1702,22 @@
     function renderBasicsIntro() {
         basicsNav('intro', renderBasicsIntro);
         renderBasics(`
+            <h3 class="choose-title choose-first">どちらから始めますか？</h3>
+            <div class="start-choices">
+                <button class="start-card" onclick="startLaws()">
+                    <span class="start-kicker">おすすめ・はじめの一歩</span>
+                    <span class="start-title">法則から学ぶ</span>
+                    <span class="start-desc">パレートの法則など${basicsLaws.length}つの法則を知り、そこに出てくる用語（${basicsLaws.reduce((n, l) => n + l.words.length, 0)}語）を一緒に覚えます。</span>
+                    <span class="start-meta">約10分</span>
+                </button>
+                <button class="start-card" onclick="displayBasicsContent(0)">
+                    <span class="start-kicker">STORY</span>
+                    <span class="start-title">ストーリーから学ぶ</span>
+                    <span class="start-desc">パン屋「こむぎ堂」の立て直しを追いながら、STP・4P・CAC・LTV を実際の場面で学びます。</span>
+                    <span class="start-meta">約20分</span>
+                </button>
+            </div>
+            <h3 class="choose-title">学び方のコツ</h3>
             <div class="method-intro">
                 <span class="story-tag">学び方</span>
                 <h3>読むだけでは、記憶に残らない</h3>
@@ -1700,7 +1740,155 @@
                 </ol>
                 <p class="method-note">思い出した用語は「復習カード」になり、1日後・3日後・7日後…とホーム画面の「今日の復習」に出てきます。</p>
             </div>
-            <button class="button" onclick="displayBasicsContent(0)">はじめる</button>
+        `);
+    }
+
+    // ---- 法則から学ぶ（はじめの一歩）：法則 → そこに出てくる単語 ----
+    const basicsLaws = [
+        {
+            name: "パレートの法則（80:20の法則）",
+            summary: "売上の約8割は、顧客や商品の約2割が生み出している、という経験則。",
+            example: "こむぎ堂では、常連のお客さん2割が、売上の大半を支えている。",
+            note: "8：2はあくまで目安で、きっちり8割・2割になるとは限りません。",
+            words: [
+                { word: "ロイヤルカスタマー", def: "何度も買ってくれる、店やブランドへの愛着が強い優良顧客" },
+                { word: "ABC分析", def: "売上への貢献が大きい順に商品や顧客を A・B・C に分け、力を入れる先を決める方法" },
+                { word: "売上構成比", def: "全体の売上のうち、各商品や各顧客が占める割合" }
+            ]
+        },
+        {
+            name: "ザイアンスの法則（単純接触効果）",
+            summary: "何度も接するほど、その相手に好意を持ちやすくなる傾向。",
+            example: "通勤路で毎日見かけるパン屋の看板に、いつのまにか親しみが湧く。",
+            note: "最初に悪い印象を持たれていると、接触を重ねても逆効果になることがあります。",
+            words: [
+                { word: "接触頻度", def: "広告や情報に、顧客が触れる回数" },
+                { word: "ブランド認知", def: "その名前や商品を、顧客が知っている状態" },
+                { word: "リターゲティング広告", def: "一度サイトを見た人に、あとからもう一度見せる広告" }
+            ]
+        },
+        {
+            name: "ロングテールの法則",
+            summary: "売れ筋以外の、たくさんのニッチ商品の売上を足し合わせると、売れ筋に匹敵することがある、という考え方。",
+            example: "実店舗は棚に限りがあるが、ネット書店は置き場所を気にせず、あまり売れない本も並べられる。",
+            note: "クリス・アンダーソンが2004年に広めた考え方で、ネット販売で特に当てはまりやすいとされます。",
+            words: [
+                { word: "ニッチ市場", def: "規模は小さいが、特定のニーズを持つ人たちがいる市場" },
+                { word: "品揃え", def: "店やサイトが扱う商品の種類と数" },
+                { word: "SKU", def: "在庫管理の最小単位。同じ商品でも、色やサイズが違えば別のSKU" }
+            ]
+        },
+        {
+            name: "ランチェスターの法則",
+            summary: "市場での立場（強者・弱者）によって、取るべき戦い方が変わる、という考え方。",
+            example: "大手のパン工場と同じ土俵で戦わず、こむぎ堂は「焼きたての食パン」だけに絞って勝負する。",
+            note: "もとは戦争の理論で、日本では営業・販売戦略に応用されてきました。",
+            words: [
+                { word: "市場シェア", def: "ある市場の中で、自社が占める売上の割合" },
+                { word: "差別化", def: "競合との違いを打ち出し、選ばれる理由をつくること" },
+                { word: "一点集中", def: "弱者の戦い方。狭い領域に力を絞って、そこで一番を目指すこと" }
+            ]
+        },
+        {
+            name: "返報性の原理",
+            summary: "何かをしてもらうと、お返しをしたくなる心理。心理学者チャルディーニが『影響力の武器』で紹介。",
+            example: "試食をもらうと、つい買ってしまう。",
+            note: "「お返しさせるための施し」と気づかれると、かえって信頼を失います。",
+            words: [
+                { word: "サンプリング", def: "商品を無料で試してもらうこと" },
+                { word: "フリーミアム", def: "基本機能は無料で、高機能なものだけ有料にする料金モデル" },
+                { word: "リード", def: "資料請求や会員登録などで連絡先がわかった、見込み客" }
+            ]
+        },
+        {
+            name: "社会的証明（バンドワゴン効果）",
+            summary: "多くの人が選んでいるものを、自分も「良いものだ」と感じやすい心理。",
+            example: "行列のできているパン屋は、味を知らなくても入ってみたくなる。",
+            note: "数字や評価を偽ると、発覚したときに大きく信頼を失います。",
+            words: [
+                { word: "口コミ", def: "利用した人が、ほかの人に伝える感想や評判" },
+                { word: "UGC", def: "ユーザー生成コンテンツ。顧客が自分で投稿する写真・レビューなど" },
+                { word: "バンドワゴン効果", def: "流行しているものに乗りたくなり、さらに選ばれやすくなる現象" }
+            ]
+        }
+    ];
+
+    function lawHeader(l, step) {
+        const total = basicsLaws.length;
+        const pct = (l + step / 2) / total * 100;
+        return `
+            <div class="topic-head">
+                <div class="topic-meta"><span class="topic-count">法則 ${l + 1} / ${total}</span><span class="topic-name">${basicsLaws[l].name}</span></div>
+                <div class="topic-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><span style="width: ${pct}%"></span></div>
+            </div>
+            <ol class="step-bar">
+                ${['法則を知る', '単語を思い出す'].map((t, i) => `<li class="${i < step ? 'done' : i === step ? 'current' : ''}">${t}</li>`).join('')}
+            </ol>`;
+    }
+
+    function startLaws() {
+        renderLawRead(0);
+    }
+
+    // 1) 法則を読む（要約・身近な例・出てくる単語）
+    function renderLawRead(l) {
+        basicsNav(`law-read-${l}`, () => renderLawRead(l));
+        const law = basicsLaws[l];
+        renderBasics(`
+            ${lawHeader(l, 0)}
+            <div class="question-container">
+                <div class="step-kicker">LAW ${l + 1}　法則</div>
+                <p class="law-summary">${law.summary}</p>
+                <div class="point-block"><span class="point-label">身近な例</span><p>${law.example}</p></div>
+                <p class="method-note">${law.note}</p>
+            </div>
+            <div class="basics-block">
+                <h3>この法則に出てくる単語</h3>
+                <ul class="word-list">
+                    ${law.words.map(k => `<li><strong>${k.word}</strong><span>${k.def}</span></li>`).join('')}
+                </ul>
+            </div>
+            <button class="button" onclick="renderLawWords(${l})">単語を思い出す</button>
+        `);
+    }
+
+    // 2) 単語を思い出す（答えを見る前に頭の中で言う → 評価すると復習カードになる）
+    function renderLawWords(l) {
+        basicsNav(`law-words-${l}`, () => renderLawWords(l));
+        const law = basicsLaws[l];
+        const isLast = l + 1 >= basicsLaws.length;
+        renderBasics(`
+            ${lawHeader(l, 1)}
+            <div class="question-container">
+                <div class="step-kicker">RECALL　単語</div>
+                <h3>いま読んだ単語の意味を、答えを見ずに思い出しましょう</h3>
+                <p>頭の中で言えたら答えを見て、思い出せたかどうかを正直に選んでください。選んだ単語は復習カードになり、日をあけて「今日の復習」に出てきます。</p>
+                ${law.words.map((k, i) => recallCardHtml(k, `law-${l}-${i}`, true, 'rateLawWord')).join('')}
+            </div>
+            <button class="button" onclick="${isLast ? 'renderLawsResult()' : `renderLawRead(${l + 1})`}">${isLast ? '結果を見る' : '次の法則へ'}</button>
+        `);
+    }
+
+    function rateLawWord(id, remembered) {
+        const [, l, i] = id.split('-').map(Number);
+        const k = basicsLaws[l].words[i];
+        addReviewCard(id, k, remembered);
+        const card = document.getElementById(id);
+        card.querySelector('.recall-rate').innerHTML = `<span class="rate-result ${remembered ? 'ok' : 'ng'}">${remembered ? '✓ 思い出せた' : 'もう一度読んで覚え直そう'}</span>`;
+    }
+
+    function renderLawsResult() {
+        basicsNav('law-result', renderLawsResult);
+        const total = basicsLaws.reduce((n, l) => n + l.words.length, 0);
+        renderBasics(`
+            <div class="result-card">
+                <h2 class="result-title">${basicsLaws.length}つの法則を学びました</h2>
+                <p><strong>${total}語</strong>の用語に出会いました。評価した用語は復習カードになります。<br>明日、ホーム画面の「今日の復習」から思い出しましょう。</p>
+                <div class="result-actions">
+                    <button class="button" onclick="displayBasicsContent(0)">こむぎ堂のストーリーへ進む</button>
+                    <button class="button-ghost" onclick="goHome()">ホームに戻る</button>
+                </div>
+            </div>
         `);
     }
 
@@ -1728,7 +1916,7 @@
         `);
     }
 
-    function recallCardHtml(k, id, withRating) {
+    function recallCardHtml(k, id, withRating, rateFn = 'rateWord') {
         return `
             <div class="recall-card" id="${id}">
                 <div class="recall-word">${k.word}</div>
@@ -1736,8 +1924,8 @@
                 <button class="button-ghost recall-reveal" onclick="revealRecall('${id}')">思い出したら、答えを見る</button>
                 ${withRating ? `
                 <div class="recall-rate" hidden>
-                    <button class="rate-btn rate-ok" onclick="rateWord('${id}', true)">思い出せた</button>
-                    <button class="rate-btn rate-ng" onclick="rateWord('${id}', false)">忘れていた</button>
+                    <button class="rate-btn rate-ok" onclick="${rateFn}('${id}', true)">思い出せた</button>
+                    <button class="rate-btn rate-ng" onclick="${rateFn}('${id}', false)">忘れていた</button>
                 </div>` : ''}
             </div>
         `;
